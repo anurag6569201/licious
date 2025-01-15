@@ -1,29 +1,3 @@
-.aboveNavbar {
-    background-color: #f1eded;
-    height: 20px;
-    /* position: fixed;
-    top: 0; */
-    overflow: hidden;
-    width: 100%;
-    font-size: 13px;
-    font-family: sans-serif;
-    align-items: center;
-    margin: auto;
-    padding: 0.5%;
-    color: #727272;
-}
-
-.aboveNavbar-inner {
-    width: 77%;
-    height: 100%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    /* border: 1px solid red; */
-    justify-content: space-between;
-}
-
 .contact-about {
     width: 30%;
     display: grid;
@@ -45,8 +19,9 @@
     padding: 1%;
     display: flex;
     justify-content: space-around;
-    /* border: 1px solid red; */
-
+}
+.MiddleNavbar_location{
+    margin-right: 5px;
 }
 
 .Navbar-Main {

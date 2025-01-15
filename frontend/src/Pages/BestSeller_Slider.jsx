@@ -24,8 +24,6 @@ const Slider = ({ props }) => {
       newdata = newdata.reverse()
       setData(newdata)
       setLoad(false)
-
-
     })
 
   }, []);

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { AuthSignupReducer } from "../Redux/AuthRedux/reducer";
 import "../Style/signup.css";
+import signupSigninImg from './Product Details/Images/signup_signin.png';
 import {
   SIGNUP_FAILURE,
   SIGNUP_SUCCESS,
@@ -145,6 +146,9 @@ const Signup = () => {
     </Stack>
   )
   return (
+    <>
+      <div className="image_wrapper_signup">
+        <img src={signupSigninImg} alt="" />
     <div className="signup_wrapper">
       {isSignupForm ? (
         <div className="input_wrapper">
@@ -176,11 +180,10 @@ const Signup = () => {
             {" "}
             Sign Up{" "}
           </button>
-          <div className="para_page">
-            <div className="para"> <p>Allready have an acount ?</p> </div>
-            <div className="para_link"> <p onClick={hanleRender}>Sign In</p> </div>
+          <div className="para_page" style={{display:'flex',alignItems:'center'}}>
+            <div className="para"  style={{margin:'0'}}> <p>Allready have an acount ?</p> </div>
+            <div className="para_link"> <p style={{cursor:'pointer'}} onClick={hanleRender}>Sign In</p> </div>
           </div>
-          <a href="https://dilicious-admin.vercel.app/login" target="_blank">For D'LICIOUS</a>
         </div>
       ) : (
         <div className="input_wrapper">
@@ -205,14 +208,15 @@ const Signup = () => {
             {" "}
             Sign In{" "}
           </button>
-          <div className="para_page">
-            <div className="para"> <p>Go to Signup page ?</p> </div>
-            <div className="para_link"> <p onClick={hanleRender}>Signup</p> </div>
+          <div className="para_page" style={{display:'flex',alignItems:'center'}}>
+            <div className="para" style={{margin:'0'}}> <p>Go to Signup page ?</p> </div>
+            <div className="para_link"> <p style={{cursor:'pointer'}} onClick={hanleRender}>Signup</p> </div>
           </div>
-          <a href="https://dilicious-admin.vercel.app/login" target="_blank">For D'LICIOUS</a>
         </div>
       )}
     </div>
+      </div>
+    </>
   );
 };
 

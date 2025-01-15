@@ -8,21 +8,27 @@
 
 .slider_card {
   width: 350px; text-align: left;
-  height: 435px;
   background-color: white;
   border-radius: 10px;
   display: inline-block;
-  /* border: 1px solid seagreen ; */
   margin-left: 5px;
   margin-right: 5px;
   cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.slider_card #para,
+.slider_card #blook,
+.slider_card #wt,
+.slider_card #heading{
+  margin: 0;
 }
 #image {
   /* border: 1px solid black ; */
   height: "300px";
   border-radius: 10px 10px 0px 0px;
   width: "375px";
+}
+#slider1 .chakra-skeleton{
+  display: flex;
 }
 #image > img {
   border-radius: 10px 10px 0px 0px;
@@ -58,7 +64,7 @@
   display: flex;
   gap: 10px;
   margin-top: 15px;
-  justify-content: space-between;
+  justify-content: left;
   margin-left: 15px;
   margin-right: 10px;
   margin-bottom: 15px;

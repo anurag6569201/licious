@@ -36,87 +36,11 @@ import { Link, useNavigate } from "react-router-dom";
 import LICIOUS from "./D'LICIOUS.jpeg";
 import axios from "axios";
 import { MdOutlineAccountCircle } from 'react-icons/md'
-import { BsApple, BsAndroid2 } from 'react-icons/bs'
-import { ImAndroid } from 'react-icons/im'
-import { IconButton } from '@chakra-ui/react'
 import Cart from "../Pages/Cart";
 import { NavbarMobTab } from "./NavbarMobTab";
-import { CloseIcon } from '@chakra-ui/icons'
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../Redux/ProductsRedux/action";
 
-const AboveNavbar = () => {
-
-
-  return (
-    <Box className="aboveNavbar">
-      <Box className="aboveNavbar-inner">
-        <Box className="apple-playStore">
-          <Box>
-            <a href="https://www.licious.in/about-us">Why Delicious?</a>
-          </Box>
-
-          <Flex style={{ alignItems: "center" }}>
-            <Text>DownloadApp </Text>
-            <a
-              style={{ paddingLeft: "5%" }}
-              href="https://itunes.apple.com/in/app/buy-meat-online-licious/id1052440342?mt=8"
-            >
-              {/* <Image
-                width="24px"
-                src="https://www.licious.in/image/rebranding/png/app-store-homepage.png"
-              /> */}
-              <BsApple width={"24px"} />
-            </a>
-            <a
-              style={{ paddingLeft: "5%" }}
-              href="https://play.google.com/store/apps/details?id=com.licious"
-            >
-              {/* <Image
-                width="24px"
-                src="https://www.licious.in/image/rebranding/png/playstore-homepage.png"
-              /> */}
-              <ImAndroid width={"24px"} />
-
-            </a>
-          </Flex>
-        </Box>
-        <Box className="contact-about">
-          <Text>
-            <Link to="/certificate">Certification</Link>
-          </Text>
-          <Text>
-            <Link to='/aboutDelicious'>About</Link>
-          </Text>
-          <Text>
-            <a href="">Careers</a>
-          </Text>
-          <Text>
-            <Menu>
-              {({ isOpen }) => (
-                <>
-                  <MenuButton isActive={isOpen}>
-                    {isOpen ? "Contact" : "Contact"}
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem>
-                      <a href="tel:1800-4190-786">1800-4190-786</a>
-                    </MenuItem>
-                    <MenuItem>
-                      <a href="mailto:talktous@licious.com">
-                        talktous@licious.com#
-                      </a>
-                    </MenuItem>
-                  </MenuList>
-                </>
-              )}
-            </Menu>
-          </Text>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
 
 const MiddleNavbar = () => {
   const { isOpen, onOpen, onToggle1, onClose } = useDisclosure();
@@ -138,16 +62,12 @@ const MiddleNavbar = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      // console.log(position)
-      // console.log("position",position.coords.latitude,position.coords.longitude)
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
     },);
     let finalApi_EndPoint = `${Api_start}lat=${Latitude}&lon=${Longitude}&appid=${Api_key}`;
-    // console.log(finalApi_EndPoint);
 
     axios.get(finalApi_EndPoint).then((res) => {
-      // console.log(res.data.name);
       setCity(res.data.name);
     });
   }, [Latitude, Longitude]);
@@ -231,7 +151,7 @@ const MiddleNavbar = () => {
         </Box>
         <Box>
           <Flex>
-            <Image src="https://www.licious.in/image/rebranding/svg/location-pin.svg" />
+            <Image className="MiddleNavbar_location" src="https://www.licious.in/image/rebranding/svg/location-pin.svg" />
             <Text>{city ? city : <Button>Choose City</Button>}</Text>
           </Flex>
         </Box>
@@ -340,7 +260,6 @@ const MiddleNavbar = () => {
           <DrawerOverlay />
           <DrawerContent >
             <DrawerCloseButton size='lg' />
-            <DrawerHeader>Sign In/Sign Up</DrawerHeader>
             <DrawerBody>
               <Signup />
             </DrawerBody>
@@ -357,7 +276,6 @@ const Navbar = () => {
   return (
     <Box className="Navbar-Main">
       <Show above='850px'>
-        <AboveNavbar />
         <MiddleNavbar />
       </Show>
 

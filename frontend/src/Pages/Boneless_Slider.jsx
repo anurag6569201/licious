@@ -70,14 +70,31 @@ const Slider2 = ({ props }) => {
           {data.map((slide) => {
             return (
               <div key={slide._id} className="slider_card">
-                <Link to={`/productdetails/${slide._id}`} >  <div id="image">
-                  <img src={slide.imgUrl} alt="image" />
-                </div></Link>
-                <div id="heading" style={{ overflow: "hidden" }}>
-                  <p>{slide.name}</p>
+                <Link to={`/productdetails/${slide._id}`} >
+                  <div id="image" style={{ position: 'relative' }}>
+                    <img style={{ height: '200px' }} src={slide.imgUrl} alt="image" />
+                    <Button onClick={() => addToCart(slide, slide.name)}
+                      style={{
+                        backgroundColor: "#D11243",
+                        color: "white",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        height: "30px",
+                        width: "100px",
+                        position: 'absolute',
+                        bottom: '10px',
+                        right: '10px',
+                      }}
+                    >
+                      ADD TO CART
+                    </Button>
+                  </div>
+                </Link>
+                <div id="heading" style={{ overflow: "hidden", marginTop: '10px' }}>
+                  <h2 style={{ fontWeight: '600' }}>{slide.name}</h2>
                 </div>
                 <div id="para" style={{ overflowX: "hidden" }}>
-                  <p>{slide.desc}</p>
+                  <p>{slide.desc.length > 50 ? `${slide.desc.substring(0, 50)}...` : slide.desc}</p>
                 </div>
                 <div id="wt">
                   <p>{slide.net}</p>
@@ -89,27 +106,16 @@ const Slider2 = ({ props }) => {
                   <p style={{ color: "gray", textAlign: "left" }}>
                     MRP: <s>₹{slide.price + Math.floor(slide.price * 0.13)}</s>
                   </p>
-                  <Button onClick={() => addToCart(slide, slide.name)}
-                    style={{
-                      backgroundColor: "#D11243",
-                      color: "white",
-                      fontSize: "13px",
-                      fontWeight: "600",
-                      height: "30px",
-                      width: "100px",
-                    }}
-                  >
-                    ADD TO CART
-                  </Button>
                 </div>
+
                 <Flex style={{ textAlign: "center", alignItems: "center", marginTop: "1%" }}>
-                  <div style={{ display: "flex", margin: "auto", }}>
+                  <div style={{ display: "flex", justifyContent: 'left', alignItems: 'center' }}>
                     <Image width="30px" src="https://www.licious.in/image/rebranding/png/Scooter_express.png" />
                     <Text fontSize="sm" color='gray'>&nbsp;&nbsp;Today in 12PM-2PM&nbsp;</Text>
-
                   </div>
                 </Flex>
               </div>
+
             );
           })}
         </Skeleton>
