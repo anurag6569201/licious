@@ -86,7 +86,7 @@ const Slider2 = ({ props }) => {
                         position: 'absolute',
                         bottom: '10px',
                         right: '10px',
-                        zIndex:10000,
+                        zIndex:100,
                       }}
                     >
                       ADD TO CART

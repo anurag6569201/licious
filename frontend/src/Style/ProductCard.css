@@ -7,7 +7,7 @@
 }
 
 .slider_card {
-  width: 350px; text-align: left;
+ width: 300px; text-align: left;
   background-color: white;
   border-radius: 10px;
   display: inline-block;
@@ -20,6 +20,13 @@
 .slider_card #wt,
 .slider_card #heading{
   margin: 0;
+}
+.slider_carddd #para,
+.slider_carddd #blook,
+.slider_carddd #wt,
+.slider_carddd #heading{
+  margin: 0;
+  text-align: left;
 }
 #image {
   /* border: 1px solid black ; */
