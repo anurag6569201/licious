@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartData, postCartData } from "../../Redux/ProfileRedux/action";
 import axios from "axios";
 import CarousalProductDetails from "./CarousalProductDetails";
-
+import Slider2 from "../Boneless_Slider";
 
 const zoomOutProperties = {
   duration: 1500,
@@ -38,8 +38,9 @@ const Slideshow = ({ img1, img2 }) => {
             key={index}
             style={{
               width: "100%",
-              borderTopLeftRadius: "4%",
-              borderTopRightRadius: "4%",
+              objectFit:'cover',
+              borderRadius:'10px',
+              height:'300px',
             }}
             src={each}
           />
@@ -110,7 +111,15 @@ const ProductDetails = () => {
 
 
 
+  const [isExpanded, setIsExpanded] = useState(false);
 
+  if (!currentProduct?.desc) {
+    return <p>No description available</p>;
+  }
+
+  const toggleReadMore = () => {
+    setIsExpanded(!isExpanded);
+  };
 
 
   return (
@@ -134,106 +143,93 @@ const ProductDetails = () => {
               style={{
                 display: "flex",
                 gap: "5%",
-
-                paddingTop: "3%",
               }}
             >
-              {/* <Box>Boneless</Box>
-            <Box>|</Box>
-            <Box>Fillet</Box> */}
+
               <Box fontSize={['13px', '16px', "19px"]}>
                 {currentProduct.tags}
               </Box>
-            </Box>
-
-            <Divider borderColor="silver" />
-
-            <Box fontSize={['15px', '15px', "15px"]}
-              style={{ textAlign: "justify", color: "#5A5A5A" }}>
-              <Text style={{ paddingTop: "3%" }}>
-                {currentProduct.desc}
-              </Text>
-              <Text style={{ paddingTop: "3%" }}>
-                Cut from the breast bone, including chicken tenders, this cut is
-                skinless and ideal if you enjoy cuts of lean meat. Chicken breasts
-                cook rather quickly (because they don't contain much fat) and can
-                be cooked in a variety of ways: grilled, baked, fried, pan-fried
-                and more!
-              </Text>
-
-              <Text style={{ paddingTop: "3%" }}>
-                Licious chickens are raised on biosecure farms and are
-                antibiotic-residue free. They are cut & cleaned by experts and
-                temperature-controlled between 0-4?, to ensure that it is chilled,
-                never frozen.
-              </Text>
-
-              <Text style={{ paddingTop: "3%" }}>
-                Order Licious Chicken Breast Boneless online and get it home
-                delivered.
-              </Text>
             </Box>
 
             <Box className="quantity">
               <Box
                 style={{
                   display: "flex",
-                  paddingLeft: "2%",
                   textAlign: "center",
                 }}
               >
 
                 <Image
-                  width="30px"
+                  width="20px"
                   src="https://d2407na1z3fc0t.cloudfront.net/Banner/Pieces.png"
                 />
-                <Text style={{ paddingLeft: "4%" }}>No. of Pieces {currentProduct.qty}</Text>
+                <Text style={{ paddingLeft: "1%" }}>No. of Pieces {currentProduct.qty}</Text>
               </Box>
               <Box style={{
                 display: "flex",
-                paddingLeft: "2%",
                 textAlign: "center"
               }}>
                 <Image
-                  width="30px"
+                  width="20px"
                   src="https://d2407na1z3fc0t.cloudfront.net/Banner/Serves.png"
                 />
-                <Text style={{ paddingLeft: "4%" }}>Serves {Math.floor(Math.random() * 8 + 1)}</Text>
+                <Text style={{ paddingLeft: "1%" }}>Serves {Math.floor(Math.random() * 8 + 1)}</Text>
               </Box>
 
               <Box style={{
                 display: "flex",
-                paddingLeft: "2%",
                 textAlign: "center"
               }}>
 
                 <Image
-                  width="30px"
+                  width="20px"
                   src="https://d2407na1z3fc0t.cloudfront.net/Banner/Netwt.png" />
-                <Text style={{ paddingLeft: "4%" }}>{currentProduct.net}</Text>
+                <Text style={{ paddingLeft: "1%" }}>{currentProduct.net}</Text>
               </Box>
             </Box>
 
 
-            <br />
+            <Box fontSize={['15px', '15px', "15px"]}
+              style={{ textAlign: "justify", color: "#5A5A5A" }}>
+            <Text style={{ paddingTop: "3%" }}>
+            {isExpanded ? currentProduct.desc : `${currentProduct.desc.substring(0, 100)}`}
+            {currentProduct.desc.length > 100 && (
+              <span
+                onClick={toggleReadMore}
+                style={{ color: "#d11243", cursor: "pointer", marginLeft: "5px" }}
+              >
+                {isExpanded ? " Read Less" : " Read More"}
+              </span>
+            )}
+
+            </Text>
+
+              
+            </Box>
+
+
+
             <Box className="price-addtwocard-main">
 
+              <div style={{lineHeight:'20px',marginTop:'10px',marginBottom:'10px'}}>
               <Flex style={{ alignItems: "center" }}>
 
-                <Text color='#D11243' fontSize={['15px', '15px', "20px"]} fontWeight='500'>MRP:</Text>
-                <Text color='#D11243' fontSize={['20px', '20px', "30px"]} fontWeight='500'>₹ {currentProduct.price}</Text>
+              <Text color='#444' fontSize={['15px', '15px', "15px"]} fontWeight='500'><span>MRP:</span> </Text>
+              <Text color='#D11243' fontSize={['15px', '15px', "20px"]} fontWeight='500'> ₹{currentProduct.price} </Text>
               </Flex>
+              <span>(incl. of all taxes)</span>
+              </div>
+              
 
               <Box style={{ marginLeft: "30%" }}>
 
                 <Button bg={"#D11243"} color="white" _hover={{ color: "black" }}
-                  paddingX={"8px"} onClick={() => addToCart(currentProduct, currentProduct.name)}>
+                  paddingX={"8px"} onClick={() => addToCart(currentProduct, currentProduct.name)} style={{fontSize:'10px'}}>
                   ADD TO CART
                 </Button>
                 {/* <ADDTOCARTBUTTON/> */}
               </Box>
             </Box>
-            <br />
             <Divider borderColor="silver" />
 
 
@@ -250,51 +246,36 @@ const ProductDetails = () => {
 
           </Box>
         </Box>
+        <br />
+            <hr />
+            <br /><br />
+        <section class="sourcing-container">
+          <div class="image-container">
+              <img src={liciousImg} alt="Licious Sourcing Image" class="sourcing-image"/>
+          </div>
 
+          <div class="sourcing-box">
+              <div class="headings">
+                <h3 class="sub-title">What's in your Box</h3>
+              </div>
 
-        <Box className="sourcing-whtUget">
-          <Box>
+              <hr class="divider"/>
 
-            <Image style={{ marginTop: "2%" }} width={['600px', '800px', '1300px']}
-              height={['400px', '500px', '500px']} src={liciousImg} />
-          </Box>
+              <div class="details">
+                  
+                  <ul class="features-list">
+                      <li><img src={yes} alt="yes"/> Chicken humanely raised in bio-secure zones</li>
+                      <li><img src={yes} alt="yes"/> Hand-selected after age and weight calibration</li>
+                      <li><img src={yes} alt="yes"/> 100% vegetarian fed</li>
+                      <li><img src={yes} alt="yes"/> Free from antibiotic residue and hormones</li>
+                      <li><img src={yes} alt="yes"/> Hygienically vacuum-packed</li>
+                      <li><img src={yes} alt="yes"/> Artisanal cut</li>
+                      <li class="not-included"><img src={no} alt="no"/> Mix of Offal Organs</li>
+                  </ul>
+              </div>
+          </div>
+      </section>
 
-          <Box className="sourcing-box">
-            <Box className="head-box">
-              <Box><Text fontSize={['2xl', '2xl', '3xl']} fontWeight='600' _hover={{ color: "#D11243" }}>What You Get</Text></Box>
-              <Box><Text fontSize={['2xl', '2xl', '3xl']} fontWeight='600' _hover={{ color: "#D11243" }}>Sourcing</Text></Box>
-            </Box>
-
-            <Divider borderColor="silver" />
-
-            <Box >
-              <Text className="spaceing" style={{ textAlign: "left" }} fontSize={['xl', '2xl', '2xl']} fontWeight='500' >What's in your Box</Text>
-              <Box className="make-it-scroll" style={{ fontSize: "18px", color: "#5A5A5A" }}>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space" space >Chicken humanely raised in restricted bio-security zones</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space"> Hand selected after age and weight calibration</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space"> 100% vegetarian fed</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space">100% free of antibiotic residue and hormones</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space"> Hygienically vacuum-packed</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space">Artisanal cut</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space">Temperature controlled Between 4°C - 8°C</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={yes} />
-                  <Text className="left-space">150+ quality and foodsafety Checks</Text></Flex>
-                <Flex className="spaceing"><Image height={['20px', '25px', "25px"]} width={['20px', '25px', "25px"]} src={no} />
-                  <Text className="left-space">Mix of Offal Organs</Text></Flex>
-
-              </Box>
-
-            </Box>
-          </Box>
-
-        </Box>
 
 
 
@@ -366,25 +347,10 @@ the deliciousBox way box end */}
 
 
 
-        <Box>
-
-
-          {/*carausal slider start */}
-          <Box>
-            <div className="App">
-              <Text fontSize='3xl' style={{ textAlign: "left" }}>You may also like</Text>
-
-              <CarousalProductDetails />
-
-            </div>
-
-
-          </Box>
-          {/* slider end */}
-
-
-
-        </Box>
+<div className="secondDiv" style={{paddingTop:'20px'}}>
+  <Text className="category1" style={{paddingBottom:'10px',fontWeight:'600'}}>You may also like</Text>
+  <Slider2 />
+</div>
 
 
 

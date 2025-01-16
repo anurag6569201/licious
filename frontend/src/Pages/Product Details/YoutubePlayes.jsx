@@ -18,7 +18,7 @@ export default function YoutubeVideoPlayer() {
   };
 
   return (
-    <div className="App">
+    <div className="App" style={{marginTop:'10px'}}>
       <button onClick={openModal} style={{ display: "flex", alignItems: "center", }}>
         <Image width="30px" src="https://www.licious.in/image/rebranding/png/feather-play-circle.png" />
         <Text fontSize="lg" style={{ color: "#D11243" }}><u>How To Cook</u></Text>

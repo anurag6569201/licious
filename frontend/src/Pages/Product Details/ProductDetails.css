@@ -1,8 +1,7 @@
 @import "react-slideshow-image/dist/styles.css";
 
 .productDetails-main {
-    margin-top: 10%;
-    background-color: #F7F6F6;
+    margin-top: 100px;
 }
 
 .sizeChange {
@@ -33,13 +32,7 @@
 }
 
 .quantity {
-    display: grid;
-    justify-content: space-between;
-    padding: 3%;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    border-radius: 2%;
-    border: 1px solid silver;
+    margin-top: 15px;
 }
 
 .price-addtwocard-main {
@@ -91,7 +84,6 @@
     height: 400px;
     margin-top: 3%;
     padding-top: 5%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     /* border: 1px solid red; */
 
 }
@@ -398,4 +390,93 @@
         height: 25px;
         overflow: hidden;
     }
+}
+
+.react-slideshow-wrapper.slide{
+    border-radius: 10px;
+}
+
+
+.sourcing-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Image Styling */
+.image-container {
+    flex: 1;
+    text-align: center;
+}
+
+.sourcing-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* Text & Content Box */
+.sourcing-box {
+    flex: 1;
+    background: transparent;
+    padding: 20px;
+    box-shadow:none;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+/* Headings */
+.headings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.title:hover {
+    color: #D11243;
+}
+
+/* Divider */
+.divider {
+    border: 1px solid silver;
+    margin: 10px 0;
+}
+
+/* List of Features */
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #5A5A5A;
+    margin-bottom: 10px;
+}
+
+.features-list img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Special Styling for "No" Items */
+.not-included {
+    color: red;
 }
