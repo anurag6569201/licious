@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,13 +33,28 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    'jazzmin',
+    # Default Django apps
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Third-party apps
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',  # Optional for social login
+    
+    # Custom apps
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +65,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    # G-auth Middleware
+    "allauth.account.middleware.AccountMiddleware",
+
+    # Cors Headers
+    'corsheaders.middleware.CorsMiddleware', 
 ]
+
 
 ROOT_URLCONF = "backend.urls"
 
@@ -73,12 +98,25 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+SITE_ID = 1
 
 
 # Password validation
@@ -115,9 +153,58 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = 'static/'
+STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_USER_PASSWORD")
+EMAIL_USE_TLS=True
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+LOGIN_REDIRECT_URL = '/'
+
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "RFQ",
+    "site_header": "RFQ Dashboard",
+    "site_brand": "RFQ",
+    "site_logo": "../static/assets/img/avatar.webp",  # Customize with your company's logo
+    "login_logo": "../static/assets/img/avatar.webp",
+    "welcome_sign": "Welcome to RFQ Lancer Admin Panel",
+    "copyright": "therfqlancer © 2024",
+    "user_avatar": "profile.picture",  # Assuming you have a user profile picture field
+
+
+    # Footer Links
+    "footer_links": [
+        {"name": "RFQ", "url": "https://therfqlancer.in", "new_window": True},
+        {"name": "Support", "url": "mailto:support@theflavourlake5@gmail.com", "new_window": True},
+    ],
+
+    "custom_css": "../static/assets/css/jazzmin.css",
+    "custom_js": "../static/assets/js/jazzmin.js"
+}

@@ -261,7 +261,7 @@ const MiddleNavbar = () => {
           <DrawerContent >
             <DrawerCloseButton size='lg' />
             <DrawerBody>
-              <Signup />
+              <Signup onClose={onClose}/>
             </DrawerBody>
           </DrawerContent>
         </Box>

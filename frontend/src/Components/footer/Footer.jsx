@@ -6,10 +6,12 @@ import Footer2 from "./Footer2.jpg";
 
 const Footer = () => {
   return (
-    <div className={styled.maxWidth} style={{maxWidth:'75%'}}>
+    <div className={styled.maxWidth} style={{maxWidth:'75%',marginTop:'100px'}}>
 
-      <img className={styled.firstimg} src="https://www.licious.in/image/rebranding/png/logo-homepage.png" alt="footerlogo" />
-
+    <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:'20px'}}>
+    <img className={styled.firstimg} src="https://www.licious.in/image/rebranding/png/logo-homepage.png" alt="footerlogo" />
+    <div style={{width:'100%',height:'1px',backgroundColor:'grey',marginBottom:'10px',opacity:'.25'}}></div>
+    </div>
       {/* useful links footer */}
       <div className={styled.fmdiv}>
         {/* first footer div column*/}

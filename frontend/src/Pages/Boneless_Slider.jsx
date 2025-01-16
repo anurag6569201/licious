@@ -70,9 +70,11 @@ const Slider2 = ({ props }) => {
           {data.map((slide) => {
             return (
               <div key={slide._id} className="slider_card">
-                <Link to={`/productdetails/${slide._id}`} >
+                
                   <div id="image" style={{ position: 'relative' }}>
-                    <img style={{ height: '200px' }} src={slide.imgUrl} alt="image" />
+                  <Link to={`/productdetails/${slide._id}`} >
+                    <img style={{ height: '200px',width:'100%',borderRadius:'10px' }} src={slide.imgUrl} alt="image" />
+                  </Link>
                     <Button onClick={() => addToCart(slide, slide.name)}
                       style={{
                         backgroundColor: "#D11243",
@@ -84,12 +86,12 @@ const Slider2 = ({ props }) => {
                         position: 'absolute',
                         bottom: '10px',
                         right: '10px',
+                        zIndex:10000,
                       }}
                     >
                       ADD TO CART
                     </Button>
                   </div>
-                </Link>
                 <div id="heading" style={{ overflow: "hidden", marginTop: '10px' }}>
                   <h2 style={{ fontWeight: '600' }}>{slide.name}</h2>
                 </div>
