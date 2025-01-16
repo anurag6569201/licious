@@ -1,7 +1,7 @@
 import * as types from "./actionType";
 import axios from "axios";
 
-const URL_MAIN = process.env.REACT_APP_MAIN_URL;
+const URL_MAIN ='http://127.0.0.1:8000/';
 //------------------------------------Profile section 
 export const profileRequest = () => {
     return { type: types.PROFILE_REQUEST };
@@ -16,18 +16,20 @@ export const profileFailure = () => {
 };
 
 export const getProfileData = () => (dispatch) => {
+    console.log(localStorage.getItem("token"))
     dispatch(profileRequest());
-    return axios.get(URL_MAIN + "/profile/getuser", {
+    return axios.get(URL_MAIN + "profile/getuser/", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log(localStorage.getItem("token"))
-        // console.log("r", r.data)
+        console.log(localStorage.getItem("token"))
+        console.log("r", r.data)
         dispatch(profileSuccess(r.data));
     }).catch((e) => {
         dispatch(profileFailure());
+        
     })
 }
 
@@ -271,3 +273,5 @@ export const postMyOrdersData = (payload) => (dispatch) => {
         dispatch(myOrdersFailure(e));
     });
 };
+
+

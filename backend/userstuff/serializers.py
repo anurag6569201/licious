@@ -1,0 +1,20 @@
+from rest_framework import serializers
+from .models import Address, CartProduct, MyOrder
+
+# Address Serializer
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'user', 'name', 'email', 'bldgno', 'locality', 'landmark', 'city']
+
+# CartProduct Serializer
+class CartProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartProduct
+        fields = ['id', 'user', 'name', 'imgUrl', 'short_desc', 'net', 'price', 'discount', 'qty']
+
+# MyOrder Serializer
+class MyOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyOrder
+        fields = ['id', 'user', 'products', 'created_at']
