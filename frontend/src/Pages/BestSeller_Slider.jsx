@@ -19,7 +19,7 @@ const Slider = ({ props }) => {
 
   useEffect(() => {
     setLoad(true)
-    axios.get("https://dilicious-adm-api.onrender.com/fooditems/get").then((res) => {
+    axios.get("http://127.0.0.1:8000/fooditems/get?format=json").then((res) => {
       let newdata = res.data.data
       newdata = newdata.reverse()
       setData(newdata)
@@ -81,8 +81,8 @@ const Slider = ({ props }) => {
         <Skeleton isLoaded={!load}>
           {data.map((slide) => {
             return (
-              <div key={slide._id} className="slider_card">
-                <Link to={`/productdetails/${slide._id}`} >  <div id="image">
+              <div key={slide.food_id} className="slider_card">
+                <Link to={`/productdetails/${slide.food_id}`} >  <div id="image">
                   <img src={slide.imgUrl} alt="image" />
                 </div></Link>
                 <div id="heading" style={{ overflow: "hidden" }}>

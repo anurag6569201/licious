@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Address, CartProduct, MyOrder
+from .models import Address, CartProduct, MyOrder,FoodItem,ProductCategory
 
 # Address Serializer
 class AddressSerializer(serializers.ModelSerializer):
@@ -18,3 +18,19 @@ class MyOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyOrder
         fields = ['id', 'user', 'products', 'created_at']
+
+
+
+
+
+
+class FoodItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodItem
+        fields = '__all__'
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'

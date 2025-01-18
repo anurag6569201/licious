@@ -162,11 +162,11 @@ const MiddleNavbar = () => {
         {SuggestionList.length > 0 ?
           <VStack borderColor="gray" border={"3px"} className="style-3" backgroundColor={"white"} borderBottomRadius='5px' padding={'10px'} width={"100%"} position={'absolute'} top={12} height={"fit-content"} maxHeight={'350px'} overflow={'auto'} >
             {SuggestionList.map((elem) => {
-              return <Link to={`/productdetails/${elem._id}`} onClick={() => {
+              return <Link to={`/productdetails/${elem.food_id}`} onClick={() => {
                 setSuggestionList([])
                 setQuery("")
               }}>
-                <HStack textAlign={'left'} key={elem._id} >
+                <HStack textAlign={'left'} key={elem.food_id} >
                   <Img src={elem.imgUrl} alt={elem.name} width={"20%"} />
                   <Text fontSize={'14px'}>{elem.name}</Text>
                 </HStack>

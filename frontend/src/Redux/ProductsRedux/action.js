@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getProducts = (id) => (dispatch) => {
   dispatch({ type: types.GET_PRODUCTS_REQUEST });
-  const url = process.env.REACT_APP_PRODUCTS_URL + `/fooditems/get/${id}`
+  const url = 'https://dilicious-adm-api.onrender.com/fooditems/get/' + id ;
   // console.log("changed id", id)
   return axios
     .get(url)
@@ -20,7 +20,7 @@ const getProducts = (id) => (dispatch) => {
 
 const getAllProducts = () => (dispatch) => {
   dispatch({ type: types.GET_ALL_PRODUCTS_REQUEST });
-  const url = process.env.REACT_APP_PRODUCTS_URL + `/fooditems/get/`
+  const url = 'http://127.0.0.1:8000/fooditems/get?format=json';
   return axios
     .get(url)
     .then((r) => {

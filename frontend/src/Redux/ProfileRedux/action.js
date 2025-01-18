@@ -1,7 +1,7 @@
 import * as types from "./actionType";
 import axios from "axios";
 
-const URL_MAIN ='http://127.0.0.1:8000/';
+const URL_MAIN ='http://127.0.0.1:8000';
 //------------------------------------Profile section 
 export const profileRequest = () => {
     return { type: types.PROFILE_REQUEST };
@@ -18,7 +18,7 @@ export const profileFailure = () => {
 export const getProfileData = () => (dispatch) => {
     console.log(localStorage.getItem("token"))
     dispatch(profileRequest());
-    return axios.get(URL_MAIN + "profile/getuser/", {
+    return axios.get(URL_MAIN + "/profile/getuser/", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

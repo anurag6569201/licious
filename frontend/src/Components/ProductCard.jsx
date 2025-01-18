@@ -35,9 +35,9 @@ const ProductCard = ({ item }) => {
 
   return (
     <>
-      <div key={item._id} className="slider_carddd">
+      <div key={item.food_id} className="slider_carddd">
         <div id="image" style={{ position: 'relative' }}>
-        <Link to={`/productdetails/${item._id}`} >
+        <Link to={`/productdetails/${item.food_id}`} >
           <img style={{ height: '200px',width:'100%',borderRadius:'10px' }} src={item.imgUrl} alt="image" />
         </Link>
           <Button onClick={() => addToCart(item, item.name)}

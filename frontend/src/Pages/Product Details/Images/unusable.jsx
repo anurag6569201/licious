@@ -51,9 +51,9 @@
    {/* <Slider {...settings}>
                 {datamap.map((item) => (
 
-                  <div className="card" key={item._id}>
+                  <div className="card" key={item.food_id}>
                     <div className="card-top">
-                    <Link to={`/productdetails/${item._id}`} >
+                    <Link to={`/productdetails/${item.food_id}`} >
                       <img
                         src={
                           defaultImage[item.name] === item.name

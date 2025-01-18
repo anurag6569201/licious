@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
+    # Custom apps
+    'corsheaders',
     # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
@@ -52,14 +54,15 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',  # Optional for social login
-    
-    # Custom apps
-    'corsheaders',
 
+    'import_export',
     'userstuff',
 ]
 
 MIDDLEWARE = [
+    # Cors Headers
+    'corsheaders.middleware.CorsMiddleware', 
+
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -70,9 +73,6 @@ MIDDLEWARE = [
 
     # G-auth Middleware
     "allauth.account.middleware.AccountMiddleware",
-
-    # Cors Headers
-    'corsheaders.middleware.CorsMiddleware', 
 ]
 
 
@@ -81,7 +81,7 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -176,6 +176,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

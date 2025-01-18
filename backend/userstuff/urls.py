@@ -1,9 +1,10 @@
 from django.urls import path
 from userstuff import views
-
+from .views import FoodItemListView, FoodItemDetailView, get_product, get_all_products,get_all_products_category
 app_name='userstuff'
 
 urlpatterns = [
+    path('',views.home,name='home'),
     path('profile/getuser/', views.get_user, name='get_user'),
     path('profile/updateuser/', views.update_user, name='update_user'),
 
@@ -21,4 +22,9 @@ urlpatterns = [
     # MyOrder routes
     path('profile/createmyorderprod/', views.create_my_order, name='create_my_order'),
     path('profile/getmyorderprod/', views.get_my_orders, name='get_my_orders'),
+
+
+    path("fooditems/get/", get_all_products, name="get_all_products"),
+    path("category/all/", get_all_products_category, name="get_all_products_category"),
+    path("fooditems/get/<str:id>/", get_product, name="get_product"),
 ]

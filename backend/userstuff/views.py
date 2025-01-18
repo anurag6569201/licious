@@ -2,9 +2,10 @@ from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
-from .models import Address, CartProduct, MyOrder
-from .serializers import AddressSerializer, CartProductSerializer, MyOrderSerializer
+from .models import Address, CartProduct, MyOrder,ProductCategory
+from .serializers import AddressSerializer, CartProductSerializer, MyOrderSerializer,ProductCategorySerializer
 from django.contrib.auth.models import User
+from django.shortcuts import render
 
 # Profile Routes
 
@@ -167,3 +168,58 @@ def get_my_orders(request):
         return Response({"orders": serializer.data}, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+def home(request):
+    print(request.user.auth_token)
+    return render(request, 'home.html')
+
+
+
+
+
+
+
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .models import FoodItem
+from .serializers import FoodItemSerializer
+
+# Get all food items
+class FoodItemListView(generics.ListAPIView):
+    queryset = FoodItem.objects.all()
+    serializer_class = FoodItemSerializer
+
+# Get a single food item by ID
+class FoodItemDetailView(generics.RetrieveAPIView):
+    queryset = FoodItem.objects.all()
+    serializer_class = FoodItemSerializer
+    lookup_field = "id"  # Assumes MongoDB ObjectId as ID
+
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_product(request, id):
+    try:
+        item = FoodItem.objects.get(food_id=id)
+        serializer = FoodItemSerializer(item)
+        return Response({"data": [serializer.data]})  # Wrap the data in a 'data' key
+    except FoodItem.DoesNotExist:
+        return Response({"error": "Food item not found"}, status=404)
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_all_products(request):
+    items = FoodItem.objects.all()
+    serializer = FoodItemSerializer(items, many=True)
+    return Response({"data": serializer.data}) 
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_all_products_category(request):
+    items = ProductCategory.objects.all()
+    serializer = ProductCategorySerializer(items, many=True)
+    return Response(serializer.data) 

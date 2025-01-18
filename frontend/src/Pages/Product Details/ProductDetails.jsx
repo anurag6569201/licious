@@ -61,7 +61,7 @@ const ProductDetails = () => {
   const toast = useToast();
   // console.log(products, "products")
   const getdata1 = async () => {
-    axios.get("https://dilicious-adm-api.onrender.com/fooditems/get").then((res) => {
+    axios.get("http://127.0.0.1:8000/fooditems/get?format=json").then((res) => {
       let newdata = res.data.data
       setdatamap(newdata)
     })

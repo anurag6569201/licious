@@ -16,7 +16,7 @@ const Slider2 = ({ props }) => {
 
   useEffect(() => {
     setLoad(true)
-    axios.get("https://dilicious-adm-api.onrender.com/fooditems/get").then((res) => {
+    axios.get("http://127.0.0.1:8000/fooditems/get?format=json").then((res) => {
       let newdata = res.data.data
       setData(newdata)
       setLoad(false)
@@ -72,7 +72,7 @@ const Slider2 = ({ props }) => {
               <div key={slide._id} className="slider_card">
                 
                   <div id="image" style={{ position: 'relative' }}>
-                  <Link to={`/productdetails/${slide._id}`} >
+                  <Link to={`/productdetails/${slide.food_id}`} >
                     <img style={{ height: '200px',width:'100%',borderRadius:'10px' }} src={slide.imgUrl} alt="image" />
                   </Link>
                     <Button onClick={() => addToCart(slide, slide.name)}

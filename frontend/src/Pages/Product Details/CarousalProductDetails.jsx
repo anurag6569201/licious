@@ -77,8 +77,8 @@ const Slider = ({ props }) => {
       <div id="slider" >
         {data.map((slide) => {
           return (
-            <div key={slide._id} className="slider_card">
-              <Link to={`/productdetails/${slide._id}`} >  <div id="image">
+            <div key={slide.food_id} className="slider_card">
+              <Link to={`/productdetails/${slide.food_id}`} >  <div id="image">
                 <img src={slide.imgUrl} alt="image" />
               </div></Link>
               <div id="heading" style={{ overflow: "hidden" }}>
