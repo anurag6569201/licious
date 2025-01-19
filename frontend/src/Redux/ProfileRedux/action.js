@@ -37,7 +37,7 @@ export const patchProfileData = (payload) => (dispatch) => {
     dispatch(profileRequest());
     // console.log(payload, "payload")
     return axios
-        .patch(URL_MAIN + "/profile/updateuser", payload, {
+        .patch(URL_MAIN + "/profile/updateuser/", payload, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
