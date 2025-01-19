@@ -204,9 +204,9 @@ from rest_framework.permissions import AllowAny
 @permission_classes([AllowAny])
 def get_product(request, id):
     try:
-        item = FoodItem.objects.get(food_id=id)
-        serializer = FoodItemSerializer(item)
-        return Response({"data": [serializer.data]})  # Wrap the data in a 'data' key
+        item = FoodItem.objects.filter(category_id=id).all()
+        serializer = FoodItemSerializer(item,many=True)
+        return Response({"data": serializer.data})  # Wrap the data in a 'data' key
     except FoodItem.DoesNotExist:
         return Response({"error": "Food item not found"}, status=404)
 

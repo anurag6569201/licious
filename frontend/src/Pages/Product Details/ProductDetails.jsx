@@ -98,7 +98,7 @@ const ProductDetails = () => {
     if (id) {
       // const products = data.ProductReducer.products;
       const productById = products?.filter(
-        (product) => product._id == id
+        (product) => product.food_id == id
       );
       productById && setCurrentProduct(productById[0]);
     }

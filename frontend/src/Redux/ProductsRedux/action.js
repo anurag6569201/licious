@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getProducts = (id) => (dispatch) => {
   dispatch({ type: types.GET_PRODUCTS_REQUEST });
-  const url = 'https://dilicious-adm-api.onrender.com/fooditems/get/' + id ;
+  const url = 'http://127.0.0.1:8000/fooditems/get/' + id + '?format=json';
   // console.log("changed id", id)
   return axios
     .get(url)

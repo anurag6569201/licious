@@ -17,7 +17,7 @@ const Slider = ({ props }) => {
 
 
   useEffect(() => {
-    axios.get("https://dilicious-adm-api.onrender.com/fooditems/get").then((res) => {
+    axios.get("http://127.0.0.1:8000/fooditems/get").then((res) => {
       let newdata = res.data.data
       newdata = newdata.reverse()
       setData(newdata)
