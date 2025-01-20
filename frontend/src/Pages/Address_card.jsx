@@ -21,7 +21,7 @@ const Address_card = ({ id, bldgno, locality, landmark, city }) => {
     };
 
     return (
-        <div className="border-0 rounded-3 mb-4" style={{ background: '#f9f9f9',width:'100%' }}>
+        <div className="border-0 rounded-3" style={{ background: '#f9f9f9',width:'100%' }}>
             <div className="p-2 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">

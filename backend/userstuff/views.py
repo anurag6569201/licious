@@ -253,20 +253,39 @@ def delete_cart_product(request, id):
 
 # Get My Orders
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def get_my_orders(request):
-    user = request.user
-    orders = MyOrder.objects.filter(user=user)
-    serializer = MyOrderSerializer(orders, many=True)
-    return Response(serializer.data, status=200)
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+    try:
+        user = User.objects.get(auth_token=token)
+        item = MyOrder.objects.filter(user=user).all()
+        serializer = MyOrderSerializer(item,many=True)
+        return Response(serializer.data)  # Wrap the data in a 'data' key
+    except FoodItem.DoesNotExist:
+        return Response({"error": "Food item not found"}, status=404)
+
 
 # Create New Order
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def create_my_order(request):
-    user = request.user
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
     serializer = MyOrderSerializer(data=request.data)
-    
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(serializer.data, status=201)
-    
     return Response(serializer.errors, status=400)

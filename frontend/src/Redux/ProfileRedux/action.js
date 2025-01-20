@@ -244,7 +244,7 @@ export const myOrdersFailure = () => {
 
 export const getMyOrdersData = () => (dispatch) => {
     dispatch(myOrdersRequest());
-    return axios.get(URL_MAIN + "/profile/getmyorderprod", {
+    return axios.get(URL_MAIN + "/profile/getmyorderprod/?format=json", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

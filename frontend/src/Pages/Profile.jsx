@@ -128,7 +128,8 @@ const Profile = () => {
                             <AccordionPanel pb={4}>
                                 <Box flex='1' textAlign='left'>
                                     {MyOrder?.length > 0 && MyOrder?.map((item) => {
-                                        return <MyOrders_Card key={item._id} data={item.products} time={item.createdAt} />
+                                        console.log("my order",MyOrder)
+                                        return <MyOrders_Card key={item.id} data={item.products} time={item.created_at} />
                                     })}
                                 </Box>
                             </AccordionPanel>

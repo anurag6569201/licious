@@ -113,27 +113,17 @@ const Form1 = () => {
   };
   return (
     <>
-      <Button
-        variant="outline"
-        width={["100%", "80%", "60%"]}
-        colorScheme={"red"}
-        onClick={AddAddress}
-      >
-        {" "}
-        + Add New Address
-      </Button>
-      <Text fontWeight={"bold"} fontSize={"20px"} alignSelf={"start"}>
+      <Text fontWeight={"bold"} fontSize={"20px"} textAlign={'left'}>
         Saved Addresses
       </Text>
-      <Text fontSize={"16px"} alignSelf={"start"}>
+      <Text fontSize={"16px"}  textAlign={'left'}>
         {address?.length} Saved Addresses
       </Text>
-      <Text alignSelf={"start"}></Text>
       <RadioGroup defaultValue="1">
         <VStack
           mt="2%"
           justifyContent={"start"}
-          alignItems={"start"}
+          alignItems={"center"}
           overflowY={"auto"}
           height={"180px"}
         >
@@ -159,66 +149,6 @@ const Form1 = () => {
             })}
         </VStack>
       </RadioGroup>
-      {isModalVisible && (
-        <>
-          <Modal isOpen={isModalVisible} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader color="">Add New Address </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <VStack gap={3}>
-                  <Input
-                    onChange={handleUserAddDetail}
-                    name="bldgno"
-                    placeholder="Flat no. / Building Name / Street no."
-                    _placeholder={{ color: "#d11243" }}
-                  />
-                  <Input
-                    onChange={handleUserAddDetail}
-                    name="locality"
-                    placeholder="Enter Your Locality"
-                    _placeholder={{ color: "#d11243" }}
-                  />
-                  <Input
-                    onChange={handleUserAddDetail}
-                    name="landmark"
-                    placeholder="landmark "
-                    _placeholder={{ color: "#d11243" }}
-                  />
-                  <Input
-                    onChange={handleUserAddDetail}
-                    name="city"
-                    placeholder="city"
-                    _placeholder={{ color: "#d11243" }}
-                  />
-                </VStack>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  bg={"#d11243"}
-                  color="#ffffff"
-                  mr={3}
-                  onClick={() => {
-                    submitUserAdd();
-                    onCloseModal();
-                  }}
-                >
-                  Save
-                </Button>
-                <Button
-                  bg={"#d11243"}
-                  color="#ffffff"
-                  mr={3}
-                  onClick={onCloseModal}
-                >
-                  cancel
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </>
-      )}
     </>
   );
 };
@@ -236,30 +166,8 @@ const Form2 = () => {
   // console.log(cart);
   return (
     <Box
-      height={["460px", "280px", "280px"]}>
-      <Text>{cart.length} Item Delivered Today in </Text>
-      <Select
-        cursor={"pointer"}
-        borderColor={"#d11243"}
-        placeholder="Select Duration"
-      >
-        <option>
-          {" "}
-          {(converted >= 12 ? converted - 12 : converted) + 2}PM -{" "}
-          {(converted >= 12 ? converted - 12 : converted) + 4}pm
-        </option>
-        <option>
-          {" "}
-          {(converted >= 12 ? converted - 12 : converted) + 4}PM -{" "}
-          {(converted >= 12 ? converted - 12 : converted) + 6}pm
-        </option>
-        <option>
-          {" "}
-          {(converted >= 12 ? converted - 12 : converted) + 6}PM -{" "}
-          {(converted >= 12 ? converted - 12 : converted) + 8}pm
-        </option>
-      </Select>
-      <br />
+     >
+      <Text textAlign={'left'}>{cart.length} Items Order Summary </Text><br />
       <Box
         padding={"3"}
         height={["350px", "180px", "180px"]}
@@ -287,145 +195,50 @@ const Form2 = () => {
 };
 
 const Form3 = () => {
-  const [PaymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("UPI");
+
+  useEffect(() => {
+    loadRazorpay();
+  }, [paymentMethod]); // Reload Razorpay when the user switches payment method
+
+  const loadRazorpay = () => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  };
+
+  const handlePayment = () => {
+    const options = {
+      key: "YOUR_RAZORPAY_KEY", // Replace with your Razorpay API Key
+      amount: 50000, // Amount in paise (₹500)
+      currency: "INR",
+      name: "Your Business Name",
+      description: `Payment via ${paymentMethod}`,
+      handler: function (response) {
+        alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+        // Add backend call here to verify payment
+      },
+      prefill: {
+        name: "John Doe",
+        email: "johndoe@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#d4224f",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
   return (
     <>
-      <Tabs isFitted>
-        <TabList>
-          <Tab fontSize={["16px", "15px", "18px"]}>UPI</Tab>
-          <Tab fontSize={["16px", "15px", "18px"]}>Credit/Debit</Tab>
-          <Tab fontSize={["16px", "15px", "18px"]}>Netbanking</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel p={4} >
-            <UPI />
-          </TabPanel>
-          <TabPanel p={4} >
-            <CARD />
-          </TabPanel>
-          <TabPanel p={4} >
-            <NET />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-      {/* <HStack justifyContent={"flex-start"} alignItems={"flex-start"}>
-        <VStack
-          spacing={"0px"}
-          gap={"-5px"}
-          margin={"0"}
-          borderRadius={"0"}
-          width={"40%"}
-        >
-          <Box
-            cursor={"pointer"}
-            width={"100%"}
-            textAlign="start"
-            color="#d4224f"
-            onClick={() => setPaymentMethod("UPI")}
-            boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            borderRadius={"0"}
-            padding={"5px 10px"}
-          >
-            Pay Using UPI
-          </Box>
-          <Box
-            cursor={"pointer"}
-            width={"100%"}
-            textAlign="start"
-            color="#d4224f"
-            onClick={() => setPaymentMethod("CARD")}
-            boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            borderRadius={"0"}
-            padding={"5px 10px"}
-          >
-            Credit/Debit Cards
-          </Box>
-          <Box
-            cursor={"pointer"}
-            width={"100%"}
-            textAlign="start"
-            color="#d4224f"
-            onClick={() => setPaymentMethod("NET")}
-            boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            borderRadius={"0"}
-            padding={"5px 10px"}
-          >
-            Netbanking
-          </Box>
-        </VStack>
-        <Box
-          boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-          borderRadius={"5px"}
-          width={"100%"}
-        >
-          {PaymentMethod == "CARD" ? (
-            <CARD />
-          ) : PaymentMethod == "NET" ? (
-            <NET />
-          ) : (
-            <UPI />
-          )}
-        </Box>
-      </HStack> */}
+      <Button colorScheme="red" mt={4} onClick={handlePayment}>
+        Pay via Razorpay
+      </Button>
     </>
-  );
-};
-const UPI = () => {
-  return (
-    <Box padding={"8px"}>
-      <Text
-        w="100%"
-        fontSize={"2xl"}
-        textAlign={"start"}
-        fontWeight="normal"
-        mb="2%"
-      >
-        Pay Using UPI
-      </Text>
-      <Flex flexWrap={"wrap"} width={"100%"} gap={"3"}>
-        <Box
-          borderRadius={"5px"}
-          boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-          width={"fit-content"}
-        >
-          <Image
-            w={"30%"}
-            src="https://d2407na1z3fc0t.cloudfront.net/Banner/GPay@3x.png"
-          />
-        </Box>
-        <Box
-          borderRadius={"5px"}
-          boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-          width={"fit-content"}
-        >
-          <Image
-            w={"30%"}
-            src="https://d2407na1z3fc0t.cloudfront.net/Banner/More%20UPI@3x.png"
-          />
-        </Box>
-        <Box
-          borderRadius={"5px"}
-          boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-          width={"fit-content"}
-        >
-          <Image
-            w={"30%"}
-            src="https://d2407na1z3fc0t.cloudfront.net/Banner/Phonepe@3x.png"
-          />
-        </Box>
-        <Box
-          borderRadius={"5px"}
-          boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-          width={"fit-content"}
-        >
-          <Image
-            w={"30%"}
-            src="https://d2407na1z3fc0t.cloudfront.net/Banner/PaytmUPI@3xNew.png"
-          />
-        </Box>
-      </Flex>
-      <br />
-    </Box>
   );
 };
 const Stats = () => {
@@ -488,116 +301,6 @@ const Stats = () => {
   );
 };
 
-const CARD = () => {
-  return (
-    <Box padding={"8px"}>
-      <Text
-        w="100%"
-        fontSize={"2xl"}
-        textAlign={"start"}
-        fontWeight="normal"
-        mb="2%"
-      >
-        Pay Credit /Debit Card
-      </Text>
-      <FormControl mr="5%">
-        <FormLabel htmlFor="cardNo" fontWeight={"normal"}>
-          Card No.
-        </FormLabel>
-        <Input
-          id="cardNo"
-          type={"number"}
-          maxLength={"16"}
-          placeholder="Card No."
-        />
-      </FormControl>
-      <Flex>
-        <FormControl>
-          <FormLabel htmlFor="mm" fontWeight={"normal"}>
-            month
-          </FormLabel>
-          <Input
-            width={"80%"}
-            id="mm"
-            type={"number"}
-            maxLength={2}
-            placeholder="MM"
-          />
-        </FormControl>
-        /
-        <FormControl>
-          <FormLabel htmlFor="yyyy" fontWeight={"normal"}>
-            year
-          </FormLabel>
-          <Input
-            width={"80%"}
-            id="yyyy"
-            type={"number"}
-            maxLength={4}
-            placeholder="YYYY"
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="CVV" fontWeight={"normal"}>
-            CVV
-          </FormLabel>
-          <Input
-            width={"80%"}
-            type={"password"}
-            maxLength={4}
-            id="CVV"
-            placeholder="CVV"
-          />
-        </FormControl>
-      </Flex>
-      <FormControl mt="2%">
-        <FormLabel htmlFor="nameOnCard" fontWeight={"normal"}>
-          Name on Card
-        </FormLabel>
-        <Input id="nameOnCard" type="text" placeholder="Enter Name" />
-      </FormControl>
-      <br />
-    </Box>
-  );
-};
-const NET = () => {
-  return (
-    <Box padding={"8px"}>
-      <Text
-        w="100%"
-        fontSize={"2xl"}
-        textAlign={"start"}
-        fontWeight="normal"
-        mb="2%"
-      >
-        Popular Banks
-      </Text>
-      <RadioGroup>
-        <VStack justifyContent={"start"} alignItems={"start"}>
-          <Radio colorScheme="red" value="1">
-            State Bank Of India
-          </Radio>
-          <Radio colorScheme="green" value="2">
-            Koatk Bank
-          </Radio>
-          <Radio colorScheme="red" value="3">
-            HDFC India
-          </Radio>
-          <Radio colorScheme="green" value="4">
-            ICICI Bank
-          </Radio>
-          <Radio colorScheme="red" value="5">
-            AXIS Bank
-          </Radio>
-          <Radio colorScheme="green" value="6">
-            Baroda Bank of India
-          </Radio>
-        </VStack>
-      </RadioGroup>
-      <br />
-    </Box>
-  );
-};
 export default function Checkout() {
   const [sliderValue, setSliderValue] = React.useState(0);
   const toast = useToast();
@@ -613,14 +316,19 @@ export default function Checkout() {
   const cart = useSelector((state) => state.ProfileReducer.cart);
   const URL_MAIN = process.env.REACT_APP_MAIN_URL;
   // console.log(cart);
-  // console.log(cart);
+  console.log('cart data to see',cart);
   const handleSubmit = () => {
-    dispatch(postMyOrdersData(cart));
+    let cart_data_checkout={
+      user:'',
+      products:cart,
+    }
+    console.log('cart data checkout',cart_data_checkout)
+    dispatch(postMyOrdersData(cart_data_checkout));
     dispatch(emptyBasket(cart));
     console.log(cart,"remaining Products in cart")
     console.log(localStorage.getItem("token"))
     axios.post(URL_MAIN + "/profile/createmyorderprod/", {
-        data: cart, headers: {
+        data: cart_data_checkout, headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
@@ -698,7 +406,7 @@ export default function Checkout() {
             borderWidth="1px"
             rounded="lg"
             boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            width={['95%', "90%", "80%", "60%"]}
+            width={['75%']}
             position={"relative"}
             margin={"auto"}
             p={6}
