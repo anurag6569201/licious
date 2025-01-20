@@ -45,7 +45,17 @@ const Slider2 = ({ props }) => {
         isClosable: true,
       })
     } else {
-      dispatch(postCartData(item))
+            let cart_data={
+        user:"",
+        name:item.name,
+        imgUrl:item.imgUrl,
+        short_desc:item.short_desc,
+        net:item.net,
+        price:item.price,
+        discount:item.discount,
+        qty:item.qty,
+      }
+      dispatch(postCartData(cart_data))
       dispatch(getCartData());
       toast({
         position: 'top',

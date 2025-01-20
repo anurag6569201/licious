@@ -92,18 +92,6 @@ def home(request):
 
 
 
-# Get all food items
-class FoodItemListView(generics.ListAPIView):
-    queryset = FoodItem.objects.all()
-    serializer_class = FoodItemSerializer
-
-# Get a single food item by ID
-class FoodItemDetailView(generics.RetrieveAPIView):
-    queryset = FoodItem.objects.all()
-    serializer_class = FoodItemSerializer
-    lookup_field = "id"  # Assumes MongoDB ObjectId as ID
-
-
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def get_product(request, id):
@@ -126,4 +114,159 @@ def get_all_products(request):
 def get_all_products_category(request):
     items = ProductCategory.objects.all()
     serializer = ProductCategorySerializer(items, many=True)
-    return Response(serializer.data) 
+    return Response(serializer.data)
+
+
+
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_address(request):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+    try:
+        user = User.objects.get(auth_token=token)
+        item = Address.objects.filter(user=user).all()
+        serializer = AddressSerializer(item,many=True)
+        return Response(serializer.data)  # Wrap the data in a 'data' key
+    except FoodItem.DoesNotExist:
+        return Response({"error": "Food item not found"}, status=404)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def create_address(request):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    serializer = AddressSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=user)
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(["DELETE"])
+@permission_classes([AllowAny])
+def delete_address(request, id):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    try:
+        address = Address.objects.get(id=id, user=user)
+        address.delete()
+        return Response({'message': 'Address deleted successfully'}, status=204)
+    except Address.DoesNotExist:
+        return Response({'error': 'Address not found'}, status=404)
+    
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_cart_products(request):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    cart_products = CartProduct.objects.filter(user=user).all()
+    serializer = CartProductSerializer(cart_products, many=True)
+    return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def create_cart_product(request):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+    name = request.data.get('name')
+    if CartProduct.objects.filter(user=user, name=name).exists():
+        return Response({'message': 'Product already in cart'}, status=200)
+
+    serializer = CartProductSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=user)
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(["DELETE"])
+@permission_classes([AllowAny])
+def delete_cart_product(request, id):
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    try:
+        cart_product = CartProduct.objects.get(id=id, user=user)
+        cart_product.delete()
+        return Response({'message': 'Cart product deleted successfully'}, status=204)
+    except CartProduct.DoesNotExist:
+        return Response({'error': 'Cart product not found'}, status=404)
+    
+
+
+# Get My Orders
+@api_view(["GET"])
+def get_my_orders(request):
+    user = request.user
+    orders = MyOrder.objects.filter(user=user)
+    serializer = MyOrderSerializer(orders, many=True)
+    return Response(serializer.data, status=200)
+
+# Create New Order
+@api_view(["POST"])
+def create_my_order(request):
+    user = request.user
+    serializer = MyOrderSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save(user=user)
+        return Response(serializer.data, status=201)
+    
+    return Response(serializer.errors, status=400)

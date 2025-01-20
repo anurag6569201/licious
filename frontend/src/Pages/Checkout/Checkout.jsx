@@ -81,7 +81,7 @@ const Form1 = () => {
     dispatch(getAddressData());
   }, [location.search]);
   const address =
-    useSelector((state) => state.ProfileReducer.address.address_List) || [];
+    useSelector((state) => state.ProfileReducer.address) || [];
   // console.log(address);
   const handleUserAddDetail = (event) => {
     // event.preventDefault();
@@ -232,7 +232,7 @@ const Form2 = () => {
   useEffect(() => {
     dispatch(getCartData());
   }, []);
-  const cart = useSelector((state) => state.ProfileReducer.cart.cart) || [];
+  const cart = useSelector((state) => state.ProfileReducer.cart) || [];
   // console.log(cart);
   return (
     <Box
@@ -610,25 +610,25 @@ export default function Checkout() {
     dispatch(getCartData());
   }, []);
 
-  const cart = useSelector((state) => state.ProfileReducer.cart.cart);
+  const cart = useSelector((state) => state.ProfileReducer.cart);
   const URL_MAIN = process.env.REACT_APP_MAIN_URL;
   // console.log(cart);
   // console.log(cart);
   const handleSubmit = () => {
     dispatch(postMyOrdersData(cart));
     dispatch(emptyBasket(cart));
-    // console.log(cart,"remaining Products in cart")
-    // console.log(localStorage.getItem("token"))
-    // axios.post(URL_MAIN + "/profile/createmyorderprod", {
-    //     data: cart, headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //     }
-    // }).then((res) => {
-    //     console.log(res)
-    // }).catch(err => {
-    //     console.log(err)
-    // })
+    console.log(cart,"remaining Products in cart")
+    console.log(localStorage.getItem("token"))
+    axios.post(URL_MAIN + "/profile/createmyorderprod/", {
+        data: cart, headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+    }).then((res) => {
+        console.log(res)
+    }).catch(err => {
+        console.log(err)
+    })
     navigate("/");
     toast({
       title: "Order Placed Successfully.",

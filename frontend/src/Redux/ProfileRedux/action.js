@@ -67,13 +67,13 @@ export const addressFailure = () => {
 
 export const getAddressData = () => (dispatch) => {
     dispatch(addressRequest());
-    return axios.get(URL_MAIN + "/profile/getaddress", {
+    return axios.get(URL_MAIN + "/profile/getaddress/?format=json", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log("r", r.data)
+        console.log("address data from api", r.data)
         dispatch(addressSuccess(r.data));
     }).catch((e) => {
         dispatch(addressFailure());
@@ -81,14 +81,14 @@ export const getAddressData = () => (dispatch) => {
 }
 export const postAddressData = (payload) => (dispatch) => {
     dispatch(addressRequest());
-    // console.log(payload, "payload")
-    return axios.post(URL_MAIN + "/profile/createaddress", payload, {
+    console.log(payload, "payload")
+    return axios.post(URL_MAIN + "/profile/createaddress/", payload, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log(r.data, "post successfull");
+        console.log(r.data, "post successfull");
         dispatch(addressSuccess(r.data));
         dispatch(getAddressData());
     }).catch((e) => {
@@ -98,7 +98,7 @@ export const postAddressData = (payload) => (dispatch) => {
 export const patchAddressData = (id, payload) => (dispatch) => {
     dispatch(addressRequest());
     // console.log(payload, "payload")
-    return axios.patch(`${URL_MAIN}/profile/updateaddress/${id}`, payload, {
+    return axios.patch(`${URL_MAIN}/profile/updateaddress/${id}/?format=json`, payload, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -114,7 +114,7 @@ export const patchAddressData = (id, payload) => (dispatch) => {
 export const deleteAddressData = (id) => (dispatch) => {
     dispatch(addressRequest());
     // console.log(payload, "payload")
-    return axios.delete(`${URL_MAIN}/profile/deleteaddress/${id}`, {
+    return axios.delete(`${URL_MAIN}/profile/deleteaddress/${id}/?format=json`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -144,13 +144,13 @@ export const cartFailure = () => {
 
 export const getCartData = () => (dispatch) => {
     dispatch(cartRequest());
-    return axios.get(URL_MAIN + "/profile/getcartprod", {
+    return axios.get(URL_MAIN + "/profile/getcartprod/?format=json", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log("r", r.data)
+        console.log("cart productds", r.data)
         dispatch(cartSuccess(r.data));
     }).catch((e) => {
         dispatch(cartFailure());
@@ -158,8 +158,8 @@ export const getCartData = () => (dispatch) => {
 }
 export const postCartData = (payload) => (dispatch) => {
     dispatch(cartRequest());
-    // console.log(payload, "payload")
-    return axios.post(URL_MAIN + "/profile/createcartprod", payload, {
+    console.log(payload, "payload")
+    return axios.post(URL_MAIN + "/profile/createcartprod/?format=json", payload, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -176,7 +176,7 @@ export const postCartData = (payload) => (dispatch) => {
 export const deleteCartData = (id) => (dispatch) => {
     dispatch(cartRequest());
     // console.log(payload, "payload")
-    return axios.delete(`${URL_MAIN}/profile/deletecartprod/${id}`, {
+    return axios.delete(`${URL_MAIN}/profile/deletecartprod/${id}/?format=json`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -250,7 +250,7 @@ export const getMyOrdersData = () => (dispatch) => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log("ordersData", r.data)
+        console.log("ordersData", r.data)
         dispatch(myOrdersSuccess(r.data));
     }).catch((e) => {
         dispatch(myOrdersFailure());
@@ -259,14 +259,14 @@ export const getMyOrdersData = () => (dispatch) => {
 
 export const postMyOrdersData = (payload) => (dispatch) => {
     dispatch(myOrdersRequest());
-    // console.log(payload, "payload")
-    return axios.post(URL_MAIN + "/profile/createmyorderprod", payload, {
+    console.log(payload, "main cart order payload")
+    return axios.post(URL_MAIN + "/profile/createmyorderprod/", payload, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }).then((r) => {
-        // console.log(r.data, "post successfull");
+        console.log(r.data, "post successfull");
         dispatch(myOrdersSuccess(r.data));
         dispatch(getMyOrdersData());
     }).catch((e) => {

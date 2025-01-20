@@ -20,8 +20,8 @@ let userInitial = {
 const Profile = () => {
 
     const Profile = useSelector((state) => state.ProfileReducer.profile) || null;
-    const MyOrder = useSelector((state) => state.ProfileReducer.myOrders?.orders) || null;
-    const Address = useSelector((state) => state.ProfileReducer.address.address_List) || null;
+    const MyOrder = useSelector((state) => state.ProfileReducer.myOrders) || null;
+    const Address = useSelector((state) => state.ProfileReducer.address) || null;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -82,6 +82,9 @@ const Profile = () => {
 
     const submitUserAdd = () => {
         let data = {
+            user:Profile.id,
+            name:Profile.username,
+            email:Profile.email,
             bldgno: userAdd.bldgno,
             locality: userAdd.locality,
             landmark: userAdd.landmark,
@@ -140,14 +143,18 @@ const Profile = () => {
                                 </AccordionButton>
                             </h3>
                             <AccordionPanel pb={4} padding="0">
-                                <VStack borderRadius={"10px"} padding={"10px"} height={"250px"} border={"1px solid red"} justifyContent={"flex-start"} alignItems={"flex-start"}>
+                                <VStack borderRadius={"10px"} padding={"10px"}  border={"1px solid red"} justifyContent={"flex-start"} alignItems={"flex-start"}>
                                     <HStack width={"100%"} justifyContent={'space-between'}>
                                         <Text>Saved Address</Text>
                                         <Button alignSelf={"end"} bg={"#d11243"} size={"md"} padding={"8px"} color={"white"} onClick={AddAddress}>Add New Address</Button>
                                     </HStack>
-                                    {Address?.length > 0 && Address?.map((item) => {
-                                        return <Address_card key={item._id} id={item._id} bldgno={item.bldgno} locality={item.locality} landmark={item.landmark} city={item.city} />
-                                    })}
+                                    {Address?.length > 0 ? (
+                                        Address.map((item) => (
+                                            <Address_card key={item.id} id={item.id} bldgno={item.bldgno} locality={item.locality} landmark={item.landmark} city={item.city} />
+                                        ))
+                                    ) : (
+                                        <Text>No addresses found.</Text>
+                                    )}
                                 </VStack>
                             </AccordionPanel>
                         </AccordionItem>
@@ -236,8 +243,8 @@ const Profile = () => {
                 isModalVisible && <>
                     <Modal isOpen={isModalVisible}>
                         <ModalOverlay />
-                        <ModalContent>
-                            <ModalHeader color=''>Add New Address </ModalHeader>
+                        <ModalContent padding="10px">
+                            <ModalHeader paddingLeft="0" paddingTop="0" color=''>Add New Address </ModalHeader>
                             <ModalCloseButton onClick={onCloseModal} />
                             <ModalBody>
                                 <VStack gap={3}>

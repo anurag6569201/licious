@@ -8,13 +8,20 @@ urlpatterns = [
     path('profile/getuser/', views.get_user, name='get_user'),
     path('profile/updateuser/', views.update_user, name='update_user'),
 
-    # Address routes
-    path('profile/getaddress/', views.get_address, name='get_address'),
-    path('profile/createaddress/', views.create_address, name='create_address'),
-    path('profile/updateaddress/<int:id>/', views.update_address, name='update_address'),
-    path('profile/deleteaddress/<int:id>/', views.delete_address, name='delete_address'),
+    path('profile/getaddress/', views.get_address,name="get_address"),
+    path('profile/createaddress/', views.create_address, name="create_address"),  # URL for creating address
+    path('profile/deleteaddress/<int:id>/', views.delete_address, name="delete_address"),  # URL for deleting address by ID
+
+
+    path('profile/getcartprod/', views.get_cart_products, name="get_cart_products"),  # Get Cart Products
+    path('profile/createcartprod/', views.create_cart_product, name="create_cart_product"),  # Add Cart Product
+    path('profile/deletecartprod/<int:id>/', views.delete_cart_product, name="delete_cart_product"),  # Delete Cart Product
+
 
     path("fooditems/get/", get_all_products, name="get_all_products"),
     path("category/all/", get_all_products_category, name="get_all_products_category"),
     path("fooditems/get/<str:id>/", get_product, name="get_product"),
+
+    path('profile/getmyorderprod/', views.get_my_orders, name="get_my_orders"),  # Get Orders
+    path('profile/createmyorderprod/', views.create_my_order, name="create_my_order"),  # Create Order
 ]

@@ -1,13 +1,14 @@
 import React from 'react';
 import "../Style/ProductCard.css";
 import { Button, Flex, Image, Text, useToast } from '@chakra-ui/react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCartData, postCartData } from '../Redux/ProfileRedux/action';
 import { Link } from "react-router-dom";
 import { MdDeliveryDining } from 'react-icons/md';
 
 const ProductCard = ({ item }) => {
   const toast = useToast();
+  const Profile = useSelector((state) => state.ProfileReducer.profile) || null;
   const dispatch = useDispatch();
   const addToCart = (item, name) => {
     if (localStorage.getItem("token") == undefined) {
@@ -20,7 +21,17 @@ const ProductCard = ({ item }) => {
         isClosable: true,
       })
     } else {
-      dispatch(postCartData(item))
+      let cart_data={
+        user:"",
+        name:item.name,
+        imgUrl:item.imgUrl,
+        short_desc:item.short_desc,
+        net:item.net,
+        price:item.price,
+        discount:item.discount,
+        qty:item.qty,
+      }
+      dispatch(postCartData(cart_data))
       dispatch(getCartData());
       toast({
         position: 'top',
