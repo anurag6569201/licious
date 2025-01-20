@@ -194,30 +194,24 @@ const Form2 = () => {
   );
 };
 
-const Form3 = () => {
-  const [paymentMethod, setPaymentMethod] = useState("UPI");
 
-  useEffect(() => {
-    loadRazorpay();
-  }, [paymentMethod]); // Reload Razorpay when the user switches payment method
+const loadRazorpay = () => {
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+  document.body.appendChild(script);
+};
 
-  const loadRazorpay = () => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-  };
-
-  const handlePayment = () => {
+const handlePayment = () => {
+  return new Promise((resolve, reject) => {
     const options = {
-      key: "YOUR_RAZORPAY_KEY", // Replace with your Razorpay API Key
-      amount: 50000, // Amount in paise (₹500)
+      key: "rzp_test_LcYoGkJW1B1wMM", // Replace with your Razorpay API Key
+      amount: totalPrice * 100, // Amount in paise
       currency: "INR",
-      name: "Your Business Name",
-      description: `Payment via ${paymentMethod}`,
+      name: "Licious",
+      description: `Payment via Razorpay`,
       handler: function (response) {
-        alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-        // Add backend call here to verify payment
+        resolve(response.razorpay_payment_id);
       },
       prefill: {
         name: "John Doe",
@@ -231,13 +225,17 @@ const Form3 = () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
-  };
+  });
+};
 
+
+const Form3 = () => {
+  useEffect(() => {
+    loadRazorpay();
+  }); // Reload Razorpay when the user switches payment method
   return (
     <>
-      <Button colorScheme="red" mt={4} onClick={handlePayment}>
-        Pay via Razorpay
-      </Button>
+      <h2 style={{textAlign:'left'}}>Complete Your Payment</h2>
     </>
   );
 };
@@ -245,7 +243,7 @@ const Stats = () => {
   return (
     <Box
       padding={"15px"}
-      width={["95%", "70%", "50%"]}
+      width={['75%']}
       borderWidth="1px"
       rounded="lg"
       margin={"auto"}
@@ -314,30 +312,20 @@ export default function Checkout() {
   }, []);
 
   const cart = useSelector((state) => state.ProfileReducer.cart);
-  const URL_MAIN = process.env.REACT_APP_MAIN_URL;
-  // console.log(cart);
-  console.log('cart data to see',cart);
-  const handleSubmit = () => {
-    let cart_data_checkout={
-      user:'',
-      products:cart,
-    }
-    console.log('cart data checkout',cart_data_checkout)
+  const URL_MAIN = 'http://127.0.0.1:8000';
+  const handleSubmit = async (razorpay_payment_id) => {
+    let cart_data_checkout = {
+      user: "",
+      products: cart,
+      payment_id: razorpay_payment_id,
+    };
+  
+    console.log("cart data checkout", cart_data_checkout);
+  
     dispatch(postMyOrdersData(cart_data_checkout));
     dispatch(emptyBasket(cart));
-    console.log(cart,"remaining Products in cart")
-    console.log(localStorage.getItem("token"))
-    axios.post(URL_MAIN + "/profile/createmyorderprod/", {
-        data: cart_data_checkout, headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
-    }).then((res) => {
-        console.log(res)
-    }).catch(err => {
-        console.log(err)
-    })
-    navigate("/");
+  
+    
     toast({
       title: "Order Placed Successfully.",
       description: "Check My orders.",
@@ -436,13 +424,18 @@ export default function Checkout() {
                   <Button
                     w={step == 3 ? 'fit-content' : "7rem"}
                     colorScheme={"red"}
-                    onClick={() => {
+                    onClick={async () => {
                       setStep(step + 1);
                       if (step === 3) {
-                        // setProgress(100);
-                        handleSubmit();
-                        setSliderValue(sliderValue + 50);
-
+                        try {
+                          let razorpay_payment_id = await handlePayment();
+                          if (razorpay_payment_id) {
+                            await handleSubmit(razorpay_payment_id);
+                            navigate('/');
+                          }
+                        } catch (error) {
+                          console.error("Payment failed:", error);
+                        }
                       } else {
                         setSliderValue(sliderValue + 50);
                       }

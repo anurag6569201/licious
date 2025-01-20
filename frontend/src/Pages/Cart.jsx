@@ -66,15 +66,14 @@ const Cart = () => {
                 onClose={onClose}
                 size={"sm"}
                 finalFocusRef={btnRef}
-                style={{ overflow: "scroll" }}
             >
                 <DrawerOverlay />
-                <DrawerContent style={{ overflow: "scroll" }}>
+                <DrawerContent >
                     <DrawerCloseButton />
                     <DrawerHeader>
                         <Text fontSize={'22px'}> Order Sumamry</Text>
                     </DrawerHeader>
-                    <DrawerBody backgroundColor={"#f2f2f2"} overflowY={"auto"}>
+                    <DrawerBody backgroundColor={"#f2f2f2"} overflowY={"scroll !important"}>
                         {cart.length <= 0 ? <Text>No Products Into the cart</Text> :
                             <Box padding={"5px"} backgroundColor="white" borderRadius={"5px"} >
                                 {cart.length > 0 && cart.map((item) => {
@@ -103,16 +102,6 @@ const Cart = () => {
                     </DrawerBody>
                     <DrawerFooter>
                         <VStack width={"100%"}>
-                            <HStack width={"100%"} padding={"5px"}
-                                justifyContent={"space-between"} borderBottom={"0.5px solid black"}>
-                                <HStack >
-                                    <Image width={"27px"} src='https://www.licious.in/image/rebranding/png/map.png' />
-                                    <Text fontWeight={"600"} fontSize={"20px"}>
-                                        Delivery Address
-                                    </Text>
-                                </HStack>
-                                <Text textDecoration={"underline"} color={"#d11243"}>Change</Text>
-                            </HStack>
                             <HStack width={"100%"} padding={"5px"} justifyContent={"space-evenly"}>
                                 <Text fontWeight={"600"} fontSize={"20px"}>Total : {totalOfItems}</Text>
                                 {cart.length <= 0 ? <Button isDisabled colorScheme={"red"} onClick={() => {

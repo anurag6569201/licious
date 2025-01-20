@@ -209,7 +209,7 @@ export const emptyBasket = (basket) => (dispatch) => {
     {
         basket.map((item) => {
             axios
-                .delete(`${URL_MAIN}/profile/deletecartprod/${item._id}`, {
+                .delete(`${URL_MAIN}/profile/deletecartprod/${item.id}/?format=json`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

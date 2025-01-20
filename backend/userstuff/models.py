@@ -34,6 +34,7 @@ class CartProduct(models.Model):
 class MyOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders",blank=True,null=True)
     products = models.JSONField()  # Store product IDs & quantities in JSON format
+    payment_id = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
