@@ -59,6 +59,7 @@ const ProductDetails = () => {
   const products = useSelector((state) => state.ProductReducer.allProducts.data)
   const dispatch = useDispatch();
   const toast = useToast();
+  const [addedItems, setAddedItems] = useState({});
   // console.log(products, "products")
   const getdata1 = async () => {
     axios.get("http://127.0.0.1:8000/fooditems/get?format=json").then((res) => {
@@ -69,38 +70,48 @@ const ProductDetails = () => {
   // ****************
   //******** */ add to cart function from button addToCart
   const addToCart = (item, name) => {
-    if (localStorage.getItem("token") == undefined) {
-      toast({
-        position: 'top',
-        title: `Not Logged in.`,
-        description: `Login first to add item into cart`,
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      })
-    } else {
-            let cart_data={
-        user:"",
-        name:item.name,
-        imgUrl:item.imgUrl,
-        short_desc:item.short_desc,
-        net:item.net,
-        price:item.price,
-        discount:item.discount,
-        qty:item.qty,
+      if (!localStorage.getItem("token")) {
+        toast({
+          position: "top",
+          title: "Not Logged in.",
+          description: "Login first to add item into cart",
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
       }
-      dispatch(postCartData(cart_data))
-      dispatch(getCartData());
-      toast({
-        position: 'top',
-        title: `${name} added Successfully.`,
-        description: `Check your cart`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-  };
+  
+      let cart_data = {
+        user: "",
+        name: item.name,
+        imgUrl: item.imgUrl,
+        short_desc: item.short_desc,
+        net: item.net,
+        price: item.price,
+        discount: item.discount,
+        qty: item.qty,
+      };
+  
+      let existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+      if (!existingCart.some(cartItem => cartItem.name === item.name)) {
+        existingCart.push(cart_data);
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        setAddedItems(prev => ({ ...prev, [item.name]: true })); // Update state
+        dispatch(postCartData(cart_data));
+        dispatch(getCartData());
+  
+        toast({
+          position: "top",
+          title: `${name} added Successfully.`,
+          description: "Check your cart",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
   //********end add to cart function from button addToCart
 
 
@@ -116,7 +127,16 @@ const ProductDetails = () => {
   }, [id]);
   // console.log(currentProduct, "detail")
 
-
+  useEffect(() => {
+    // Load cart from localStorage
+    let savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartMap = {};
+    savedCart.forEach((item) => {
+      cartMap[item.name] = true; // Mark items as added
+      dispatch(postCartData(item));
+    });
+    setAddedItems(cartMap);
+  }, []);
 
 
 
@@ -232,10 +252,9 @@ const ProductDetails = () => {
               
 
               <Box style={{ marginLeft: "30%" }}>
-
-                <Button bg={"#D11243"} color="white" _hover={{ color: "black" }}
-                  paddingX={"8px"} onClick={() => addToCart(currentProduct, currentProduct.name)} style={{fontSize:'10px'}}>
-                  ADD TO CART
+              <Button bg={"#D11243"} color="white" _hover={{ color: "black" }}
+                  paddingX={"18px"} onClick={() => addToCart(currentProduct, currentProduct.name)} style={{fontSize:'18px',backgroundColor: addedItems[currentProduct.name] ? "gray" : "#D11243",}} disabled={addedItems[currentProduct.name]}>
+                  {addedItems[currentProduct.name] ? "Added" : "Add to Cart"}
                 </Button>
                 {/* <ADDTOCARTBUTTON/> */}
               </Box>

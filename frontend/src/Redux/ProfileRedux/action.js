@@ -141,6 +141,25 @@ export const cartFailure = () => {
     return { type: types.CART_FAILURE };
 };
 
+export const updateCartQuantity = (id, qty) => (dispatch) => {
+    dispatch({ type: 'UPDATE_CART_REQUEST' });
+
+    // Make an API call or update state logic
+    return axios.patch(URL_MAIN + `/cart/update/${id}/?format=json`, 
+    { qty }, 
+    {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then(response => {
+        dispatch({ type: 'UPDATE_CART_SUCCESS', payload: response.data });
+    })
+    .catch(error => {
+        dispatch({ type: 'UPDATE_CART_FAILURE', payload: error });
+    });
+};
+
 
 export const getCartData = () => (dispatch) => {
     dispatch(cartRequest());
@@ -204,7 +223,7 @@ export const EmptyCartFailure = () => {
 
 
 export const emptyBasket = (basket) => (dispatch) => {
-    // console.log(basket.length,basket, "basket")
+    console.log(basket.length,basket, "basket")
     dispatch(EmptyCartRequest());
     {
         basket.map((item) => {

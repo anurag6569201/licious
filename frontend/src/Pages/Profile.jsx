@@ -5,6 +5,7 @@ import { getAddressData, getMyOrdersData, getProfileData, patchProfileData, post
 import Address_card from './Address_card';
 import MyOrders_Card from './MyOrders_Card';
 import profile_logo from '../Components/footer/image.png';
+import '../Style/profile.css'
 
 let addressInitial = {
     bldgno: "",
@@ -104,7 +105,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className='container p-0' style={{ marginTop: '100px', width: '75%', textAlign: 'left' }}>
+            <div className='container p-0 main_profile_card' style={{ marginTop: '100px', width: '75%', textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div className="profile_logo">
                         <img width={50} height={50} style={{ borderRadius: '50%' }} src={profile_logo} alt="" />

@@ -532,6 +532,10 @@
         margin-top: 20px;
         margin-bottom: 50px;
     }
+    .mainDiv{
+        padding-top: 20px;
+        padding: 10px;
+    }
 }
 
 
@@ -616,5 +620,8 @@
         text-align: justify;
         margin-top: 20px;
         margin-bottom: 50px;
+    }
+    .mainDiv{
+        padding-top: 60px;
     }
 }

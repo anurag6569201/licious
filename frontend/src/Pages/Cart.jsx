@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react'
 import {
     Drawer,
@@ -8,14 +7,13 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
-    useDisclosure,
     Button,
-    Input,
     Text,
     Box,
     HStack,
     Image,
-    VStack
+    VStack,
+    useDisclosure,
 } from '@chakra-ui/react'
 import Cart_prod_card from './Cart_prod_card'
 import { useNavigate } from "react-router-dom";
@@ -31,8 +29,10 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getCartData());
-    }, [])
+    }, [dispatch])
+
     let totalOfItems = 0;
+
     return (
         <>
             {localStorage.getItem("token") == undefined ?
@@ -42,11 +42,9 @@ const Cart = () => {
                             width="20px"
                             src="https://www.licious.in/image/rebranding/svg/cart.svg"
                         />
-                        <Text position={"absolute"} top={0} left={3.0} fontWeight={700} color={"#d11243"}>{cart?.length}
-                        </Text>
+                        <Text position={"absolute"} top={0} left={3.0} fontWeight={700} color={"#d11243"}>{cart?.length}</Text>
                         <Text color="gray">Cart</Text>
                     </HStack>
-
                 </Button> :
                 <Button ref={btnRef} variant="outline" onClick={onOpen}>
                     <HStack fontSize={["13px", "15px", "18px"]} padding={["0px", "0px", "5px"]} justify={"center"} align={"center"} position={"relative"}>
@@ -54,12 +52,11 @@ const Cart = () => {
                             width="20px"
                             src="https://www.licious.in/image/rebranding/svg/cart.svg"
                         />
-                        <Text position={"absolute"} top={0} left={3.0} fontWeight={700} color={"#d11243"}>{cart?.length}
-                        </Text>
-                        <Text color="gray"> Cart</Text>
+                        <Text position={"absolute"} top={0} left={3.0} fontWeight={700} color={"#d11243"}>{cart?.length}</Text>
+                        <Text color="gray">Cart</Text>
                     </HStack>
-
                 </Button>}
+
             <Drawer
                 isOpen={isOpen}
                 placement='right'
@@ -71,14 +68,14 @@ const Cart = () => {
                 <DrawerContent >
                     <DrawerCloseButton />
                     <DrawerHeader>
-                        <Text fontSize={'22px'}> Order Sumamry</Text>
+                        <Text fontSize={'22px'}>Order Summary</Text>
                     </DrawerHeader>
-                    <DrawerBody backgroundColor={"#f2f2f2"} overflowY={"scroll !important"}>
-                        {cart.length <= 0 ? <Text>No Products Into the cart</Text> :
+                    <DrawerBody backgroundColor={"#f2f2f2"} overflowY={"scroll !important"} padding={"20px !important"}>
+                        {cart.length <= 0 ? <Text>No Products In the cart</Text> :
                             <Box padding={"5px"} backgroundColor="white" borderRadius={"5px"} >
                                 {cart.length > 0 && cart.map((item) => {
-                                    totalOfItems += Number(item.price);
-                                    return <Cart_prod_card key={item.id} id={item.id} name={item.name} net={item.net} price={item.price} />
+                                    totalOfItems += (Number(item.price) * Number(item.qty));
+                                    return <Cart_prod_card key={item.id} id={item.id} name={item.name} net={item.net} price={item.price} qty={item.qty} />
                                 })}
                             </Box>
                         }
@@ -87,7 +84,7 @@ const Cart = () => {
                             <Text w="100%" fontSize={"l"} textAlign={'start'} fontWeight="500" >
                                 Bill Details
                             </Text>
-                            <VStack flexWrap={"wrap"} width={"100%"} >
+                            <VStack flexWrap={"wrap"} width={"100%"}>
                                 <HStack width={"100%"} lineHeight={"14px"} justifyContent={"space-between"} alignItems={"center"}><Text>Sub Total</Text> <Text>{totalOfItems}</Text> </HStack>
                                 <HStack width={"100%"} lineHeight={"14px"} justifyContent={"space-between"} alignItems={"center"}><Text>Discount</Text> <Text>0</Text> </HStack>
                                 <HStack width={"100%"} lineHeight={"14px"} justifyContent={"space-between"} alignItems={"center"}><Text>Delivery Charge</Text> <Text>0</Text> </HStack>
@@ -121,4 +118,4 @@ const Cart = () => {
     )
 }
 
-export default Cart
+export default Cart;

@@ -60,98 +60,61 @@ let addressInitial = {
   landmark: "",
   city: "",
 };
-const Form1 = () => {
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const onCloseModal = () => {
-    setIsModalVisible(false);
-  };
-  const AddAddress = () => {
-    setIsModalVisible(true);
-  };
-  const toast = useToast();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const location = useLocation();
-  const [userAdd, setuserAdd] = useState(addressInitial);
-
+const Form1 = ({ selectedAddress, setSelectedAddress }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const address = useSelector((state) => state.ProfileReducer.address) || [];
+
+  // Dispatch action to fetch address data on load or URL change
   useEffect(() => {
     dispatch(getAddressData());
   }, [location.search]);
-  const address =
-    useSelector((state) => state.ProfileReducer.address) || [];
-  // console.log(address);
-  const handleUserAddDetail = (event) => {
-    // event.preventDefault();
-    const { name, value } = event.target;
-    setuserAdd({
-      ...userAdd,
-      [name]: value,
-    });
+
+  // Handler for changing the selected address
+  const handleAddressChange = (value) => {
+    setSelectedAddress(value);  // Update state with selected address
+    localStorage.setItem("selectedAddress", value); // Store selected address in localStorage
   };
-  // console.log(userAdd);
-  const submitUserAdd = () => {
-    let data = {
-      bldgno: userAdd.bldgno,
-      locality: userAdd.locality,
-      landmark: userAdd.landmark,
-      city: userAdd.city,
-    };
-    // console.log(data, "data")
-    dispatch(postAddressData(data));
-    dispatch(getAddressData());
-    toast({
-      position: "top",
-      title: "Added Successfully.",
-      description: `Address Added.`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+
   return (
     <>
-      <Text fontWeight={"bold"} fontSize={"20px"} textAlign={'left'}>
+      <Text fontWeight={"bold"} fontSize={"20px"} textAlign={"left"}>
         Saved Addresses
       </Text>
-      <Text fontSize={"16px"}  textAlign={'left'}>
-        {address?.length} Saved Addresses
+      <Text fontSize={"16px"} textAlign={"left"}>
+        {address.length} Saved Addresses
       </Text>
-      <RadioGroup defaultValue="1">
-        <VStack
-          mt="2%"
-          justifyContent={"start"}
-          alignItems={"center"}
-          overflowY={"auto"}
-          height={"180px"}
-        >
-          {address?.length > 0 &&
-            address?.map((item) => {
-              return (
-                <Radio
-                  width={"100%"}
-                  value={item._id}
-                  mt="2%"
-                  colorScheme={"red"}
-                >
-                  <Address_card
-                    key={item._id}
-                    id={item._id}
-                    bldgno={item.bldgno}
-                    locality={item.locality}
-                    landmark={item.landmark}
-                    city={item.city}
-                  />
-                </Radio>
-              );
-            })}
+
+      <RadioGroup onChange={handleAddressChange} value={selectedAddress}>
+        <VStack mt="2%" justifyContent="start" alignItems="start" overflowY="auto" height="180px">
+          {address?.map((item) => (
+            <Radio
+              key={item.id}
+              value={item.id}
+              colorScheme="red"
+              onChange={() => setSelectedAddress(item.id)}
+              style={{
+                background: selectedAddress === item.id ? "red" : "#f4f4f4",
+                borderRadius: "50%", // Optional: for rounded corners
+                padding: "6px", // Optional: for better spacing
+              }}
+            >
+              <Address_card
+                id={item.id}
+                bldgno={item.bldgno}
+                locality={item.locality}
+                landmark={item.landmark}
+                city={item.city}
+              />
+            </Radio>
+          ))}
         </VStack>
       </RadioGroup>
     </>
   );
 };
+
+
 const Form2 = () => {
   let date = new Date();
   let current_time = date.getHours();
@@ -166,7 +129,7 @@ const Form2 = () => {
   // console.log(cart);
   return (
     <Box
-     >
+    >
       <Text textAlign={'left'}>{cart.length} Items Order Summary </Text><br />
       <Box
         padding={"3"}
@@ -176,11 +139,11 @@ const Form2 = () => {
       >
         {cart?.length > 0 &&
           cart?.map((item) => {
-            totalPrice += Number(item.price);
+            totalPrice += (Number(item.price) * Number(item.qty));
             return (
               <Checkout_cart_prod_card
-                key={item._id}
-                id={item._id}
+                key={item.id}
+                id={item.id}
                 imgUrl={item.imgUrl}
                 name={item.name}
                 net={item.net}
@@ -235,12 +198,12 @@ const Form3 = () => {
   }); // Reload Razorpay when the user switches payment method
   return (
     <>
-      <h2 style={{textAlign:'left'}}>Complete Your Payment</h2>
     </>
   );
 };
 const Stats = () => {
   return (
+    <div className="statics_bill_checkout">
     <Box
       padding={"15px"}
       width={['75%']}
@@ -296,6 +259,7 @@ const Stats = () => {
       </VStack>
       <br />
     </Box>
+    </div>
   );
 };
 
@@ -318,14 +282,17 @@ export default function Checkout() {
       user: "",
       products: cart,
       payment_id: razorpay_payment_id,
+      address_id: localStorage.getItem("selectedAddress"),
     };
-  
+
     console.log("cart data checkout", cart_data_checkout);
-  
+
     dispatch(postMyOrdersData(cart_data_checkout));
     dispatch(emptyBasket(cart));
-  
-    
+    localStorage.removeItem("selectedAddress");
+    localStorage.removeItem("cart");
+
+
     toast({
       title: "Order Placed Successfully.",
       description: "Check My orders.",
@@ -335,133 +302,98 @@ export default function Checkout() {
       isClosable: true,
     });
   };
+  const [selectedAddress, setSelectedAddress] = useState(localStorage.getItem("selectedAddress") || "");
+
+  const handleAddressChange = (value) => {
+    setSelectedAddress(value);  // Update state with selected address
+    localStorage.setItem("selectedAddress", value); // Store selected address in localStorage
+  };
   return (
     <>
       <Box className="mainbox" margin={"auto"} mb={"100px"} mt={"10%"}>
-        <VStack margin={'auto'}>
-          <Box
-            paddingY="10px"
-            position={"relative"}
-            width={['85%', "80%", "80%", "65%"]}>
-            <Slider aria-label='slider-ex-2' colorScheme='red' id="slider"
-              width={"100%"}
-              defaultValue={0}
-              min={0}
-              max={100}
-              // isDisabled
-              value={sliderValue}>
-              <Show above='850px'>
-                <SliderMark
-                  value={-5}
-                  fontSize="sm">
-                  <Text fontWeight={"bold"} fontSize={["10px", "16px", "20px"]}>
-                    Address{" "}
-                  </Text>
-                  Delivery address
-                </SliderMark>
-                <SliderMark
-                  value={42}
-                  fontSize="sm">
-                  <Text fontWeight={"bold"} fontSize={["10px", "16px", "20px"]}>
-                    Summary{" "}
-                  </Text>
-                  {cart?.length} item in 1 shipments
-                </SliderMark>
-                <SliderMark
-                  value={95}
-                  fontSize="sm">
-                  <Text fontWeight={"bold"} fontSize={["13px", "16px", "20px"]}>
-                    Payment{" "}
-                  </Text>
-                </SliderMark>
-              </Show>
-              <SliderTrack dir="ltr"
-                position={"absolute"}
-                bottom={"0px"}>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb boxSize={6} padding={0}>
-                <Box
-                  color="green.800"
-                  as={MdCheckCircle}
-                />
-              </SliderThumb>
-            </Slider>
-          </Box>
-          <br />
-          <Box
-            height={["fit-content", "400px", "fit-content"]}
-            borderWidth="1px"
-            rounded="lg"
-            boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
-            width={['75%']}
-            position={"relative"}
-            margin={"auto"}
-            p={6}
-            as="form">
-            {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
-            <ButtonGroup mt="5%" w="100%">
-              <Flex
-                w="90%"
-                justifyContent="space-between"
-                position={"absolute"}
-                bottom={"5"}
-              >
-                <Flex>
-                  <Button
-                    onClick={() => {
-                      setStep(step - 1);
-                      setSliderValue(sliderValue - 50);
-                    }}
-                    isDisabled={step === 1}
-                    colorScheme={"red"}
-                    variant="solid"
-                    w="7rem"
-                    mr="5%"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    w={step == 3 ? 'fit-content' : "7rem"}
-                    colorScheme={"red"}
-                    onClick={async () => {
-                      setStep(step + 1);
-                      if (step === 3) {
-                        try {
-                          let razorpay_payment_id = await handlePayment();
-                          if (razorpay_payment_id) {
-                            await handleSubmit(razorpay_payment_id);
-                            navigate('/');
-                          }
-                        } catch (error) {
-                          console.error("Payment failed:", error);
-                        }
-                      } else {
-                        setSliderValue(sliderValue + 50);
-                      }
-                    }}
-                    variant="solid"
-                  >{step == 3 ? `Place Order ₹ ${totalPrice}` : "Next"}
-                  </Button>
-                </Flex>
-                {/* {step === 3 ? (
-                  <Button
-                    w="40%"
-                    bg="#d11243"
-                    color={"white"}
-                    variant="solid"
-                    onClick={handleSubmit}
-                  >
-                    Place Order with Pay ₹ {totalPrice}
-                  </Button>
-                ) : null} */}
-              </Flex>
-            </ButtonGroup>
-          </Box>
-        </VStack>
+      <VStack margin={'auto'}>
+        <Box paddingY="10px" position={"relative"} width={['85%', "80%", "80%", "65%"]}>
+          <Slider aria-label='slider-ex-2' colorScheme='red' id="slider"
+            width={"100%"}
+            defaultValue={0}
+            min={0}
+            max={100}
+            value={sliderValue}>
+            <Show above='850px'>
+              <SliderMark value={-5} fontSize="sm">
+                <Text fontWeight={"bold"} fontSize={["10px", "16px", "20px"]}>Address</Text>
+                Delivery address
+              </SliderMark>
+              <SliderMark value={42} fontSize="sm">
+                <Text fontWeight={"bold"} fontSize={["10px", "16px", "20px"]}>
+                  Summary
+                </Text>
+                {cart?.length} item in 1 shipment
+              </SliderMark>
+              <SliderMark value={95} fontSize="sm">
+                <Text fontWeight={"bold"} fontSize={["13px", "16px", "20px"]}>Payment</Text>
+              </SliderMark>
+            </Show>
+            <SliderTrack dir="ltr" position={"absolute"} bottom={"0px"}>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb boxSize={6} padding={0}>
+              <Box color="green.800" as={MdCheckCircle} />
+            </SliderThumb>
+          </Slider>
+        </Box>
         <br />
-        <Stats />
-      </Box>
+        <Box height={["fit-content", "400px", "fit-content"]} borderWidth="1px" rounded="lg" boxShadow=" rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+          width={['75%']} position={"relative"} margin={"auto"} p={6} as="form">
+          {step === 1 ? <Form1 selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} /> : step === 2 ? <Form2 /> : <Form3 />}
+          <ButtonGroup mt="5%" w="100%">
+            <Flex w="90%" justifyContent="space-between" position={"absolute"} bottom={"5"}>
+              <Flex>
+                <Button
+                  onClick={() => {
+                    setStep(step - 1);
+                    setSliderValue(sliderValue - 50);
+                  }}
+                  isDisabled={step === 1}
+                  colorScheme={"red"}
+                  variant="solid"
+                  w="7rem"
+                  mr="5%"
+                >
+                  Back
+                </Button>
+                <Button
+                  w={step === 3 ? 'fit-content' : "7rem"}
+                  colorScheme={"red"}
+                  onClick={async () => {
+                    setStep(step + 1);
+                    if (step === 3) {
+                      try {
+                        let razorpay_payment_id = await handlePayment();
+                        if (razorpay_payment_id) {
+                          await handleSubmit(razorpay_payment_id);
+                          navigate('/');
+                        }
+                      } catch (error) {
+                        console.error("Payment failed:", error);
+                      }
+                    } else {
+                      setSliderValue(sliderValue + 50);
+                    }
+                  }}
+                  variant="solid"
+                  isDisabled={!selectedAddress} // Disable if no address is selected
+                >
+                  {step === 3 ? `Place Order ₹ ${totalPrice}` : "Next"}
+                </Button>
+              </Flex>
+            </Flex>
+          </ButtonGroup>
+        </Box>
+      </VStack>
+      <br />
+      <Stats />
+    </Box>
     </>
   );
 }

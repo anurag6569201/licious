@@ -175,7 +175,7 @@ const NavbarMobTab = () => {
                   </Link>
 
                   <MenuItem icon={""} >
-                    App Support
+                    Attendance
                   </MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={handleLogout} icon={""}>

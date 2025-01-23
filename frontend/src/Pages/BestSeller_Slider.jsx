@@ -10,7 +10,7 @@ import { getCartData, postCartData } from "../Redux/ProfileRedux/action";
 const Slider = ({ props }) => {
   const [data, setData] = useState([]);
   const [load, setLoad] = useState(true);
-
+  const [addedItems, setAddedItems] = useState({});
   const toast = useToast();
   const dispatch = useDispatch();
 
@@ -26,6 +26,14 @@ const Slider = ({ props }) => {
       setLoad(false)
     })
 
+    // Load cart from localStorage
+    let savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartMap = {};
+    savedCart.forEach((item) => {
+      cartMap[item.name] = true; // Mark items as added
+      dispatch(postCartData(item));
+    });
+    setAddedItems(cartMap);
   }, []);
 
 
@@ -46,36 +54,46 @@ const Slider = ({ props }) => {
 
 
   const addToCart = (item, name) => {
-    if (localStorage.getItem("token") == undefined) {
+    if (!localStorage.getItem("token")) {
       toast({
-        position: 'top',
-        title: `Not Logged in.`,
-        description: `Login first to add item into cart`,
-        status: 'warning',
+        position: "top",
+        title: "Not Logged in.",
+        description: "Login first to add item into cart",
+        status: "warning",
         duration: 3000,
         isClosable: true,
-      })
-    } else {
-            let cart_data={
-        user:"",
-        name:item.name,
-        imgUrl:item.imgUrl,
-        short_desc:item.short_desc,
-        net:item.net,
-        price:item.price,
-        discount:item.discount,
-        qty:item.qty,
-      }
-      dispatch(postCartData(cart_data))
+      });
+      return;
+    }
+
+    let cart_data = {
+      user: "",
+      name: item.name,
+      imgUrl: item.imgUrl,
+      short_desc: item.short_desc,
+      net: item.net,
+      price: item.price,
+      discount: item.discount,
+      qty: item.qty,
+    };
+
+    let existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (!existingCart.some(cartItem => cartItem.name === item.name)) {
+      existingCart.push(cart_data);
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+      setAddedItems(prev => ({ ...prev, [item.name]: true })); // Update state
+      dispatch(postCartData(cart_data));
       dispatch(getCartData());
+
       toast({
-        position: 'top',
+        position: "top",
         title: `${name} added Successfully.`,
-        description: `Check your cart`,
-        status: 'success',
+        description: "Check your cart",
+        status: "success",
         duration: 3000,
         isClosable: true,
-      })
+      });
     }
   };
 
@@ -111,18 +129,23 @@ const Slider = ({ props }) => {
                   <p style={{ color: "gray", textAlign: "left" }}>
                     MRP: <s>₹{slide.price + Math.floor(slide.price * 0.13)}</s>
                   </p>
-                  <Button onClick={() => addToCart(slide, slide.name)}
+                  <Button
+                    onClick={() => addToCart(slide, slide.name)}
                     style={{
-                      backgroundColor: "#D11243",
+                      backgroundColor: addedItems[slide.name] ? "gray" : "#D11243",
                       color: "white",
                       fontSize: "13px",
                       fontWeight: "600",
                       height: "30px",
                       width: "100px",
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "10px",
+                      zIndex: 100,
                     }}
-
+                    disabled={addedItems[slide.name]}
                   >
-                    ADD TO CART
+                    {addedItems[slide.name] ? "Added" : "Add to Cart"}
                   </Button>
                 </div>
                 <Flex style={{ textAlign: "center", alignItems: "center", marginTop: "1%" }}>

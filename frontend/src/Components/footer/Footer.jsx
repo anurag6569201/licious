@@ -219,7 +219,7 @@ const Footer = () => {
       <p style={{ textAlign: "center", fontSize: "12px", color: "#333a3f" }}>
 
 
-        <b> @2022 Delicious. All Rights Reserved.</b>
+        <b> @2022 Delicious. All Rights Reserved. Developed by: <a style={{color:'red',textDecoration:'underline'}} href="https://anurag.icu">anurag6569201</a></b>
 
       </p>
       <Box style={{ textAlign: "justify", alignItems: "center", fontSize: "12px", marginBottom: "2%" }}>

@@ -3,10 +3,11 @@ import React from 'react'
 import { MdDeleteForever } from 'react-icons/md'
 import { useDispatch } from 'react-redux';
 import { deleteAddressData, getAddressData } from '../Redux/ProfileRedux/action';
-
+import { useLocation } from "react-router-dom";
 const Address_card = ({ id, bldgno, locality, landmark, city }) => {
     const toast = useToast();
     const dispatch = useDispatch();
+    const location = useLocation();
     const deleteFromCart = (id, name) => {
         dispatch(deleteAddressData(id))
         dispatch(getAddressData());
@@ -36,14 +37,17 @@ const Address_card = ({ id, bldgno, locality, landmark, city }) => {
                 </div>
 
                 <div>
-                    <button
-                        className="btn btn-danger p-2 rounded-circle d-flex align-items-center justify-content-center"
-                        onClick={() => deleteFromCart(id)}
-                        style={{ width: '35px', height: '35px' }}
-                    >
-                        <MdDeleteForever color="white" size="20px" />
-                    </button>
+                    {!location.pathname.includes("/checkout") && ( // Hide button if URL contains "/checkout"
+                        <button
+                            className="btn btn-danger p-2 rounded-circle d-flex align-items-center justify-content-center"
+                            onClick={() => deleteFromCart(id)}
+                            style={{ width: "35px", height: "35px" }}
+                        >
+                            <MdDeleteForever color="white" size="20px" />
+                        </button>
+                    )}
                 </div>
+
             </div>
         </div>
     )

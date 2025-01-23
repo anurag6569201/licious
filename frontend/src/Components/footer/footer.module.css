@@ -126,11 +126,11 @@
 @media all and (min-width:80px) and (max-width:450px) {
 
     .maxWidth {
-        width: 90%;
+        width: 90% !important;
         margin: 20px auto;
+        max-width: 90% !important;
         /* border: 1px solid red; */
     }
-
     .fmdiv {
         /* border: 1px solid black; */
         display: grid;
