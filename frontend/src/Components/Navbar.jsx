@@ -236,9 +236,12 @@ const MiddleNavbar = () => {
                       </MenuItem>
                     </Link>
 
+                    <Link to="/attendance">
                     <MenuItem icon={""} >
                       Attendance
                     </MenuItem>
+                    </Link>
+
                     <MenuDivider />
                     <MenuItem onClick={handleLogout} icon={""}>
                       Logout

@@ -24,7 +24,7 @@ class CartProduct(models.Model):
     net = models.CharField(max_length=50)  # Example: "10gms", "0.5lts"
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    qty = models.CharField(max_length=20)
+    qty = models.IntegerField()
 
     def __str__(self):
         return f"{self.name} - {self.qty} qty"
@@ -35,6 +35,7 @@ class MyOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders",blank=True,null=True)
     products = models.JSONField()  # Store product IDs & quantities in JSON format
     payment_id = models.CharField(max_length=100)
+    address_id = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="address",blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

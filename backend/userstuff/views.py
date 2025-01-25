@@ -289,3 +289,35 @@ def create_my_order(request):
         serializer.save(user=user)
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
+
+
+@csrf_exempt
+def update_cart_quantity(request, item_id):
+    if request.method == "PATCH":
+        try:
+            data = json.loads(request.body)
+            new_qty = data.get("qty")
+
+            if new_qty is None or new_qty < 1:
+                return JsonResponse({"error": "Invalid quantity"}, status=400)
+
+            cart_item = CartProduct.objects.get(id=item_id)
+            cart_item.qty = new_qty
+            cart_item.save()
+
+            return JsonResponse({"message": "Quantity updated", "id": cart_item.id, "qty": cart_item.qty}, status=200)
+
+        except CartProduct.DoesNotExist:
+            return JsonResponse({"error": "Item not found"}, status=404)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+
+
+
+def attendance(request):
+    return render(request,'attendance/attendance.html')

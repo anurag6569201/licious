@@ -24,4 +24,7 @@ urlpatterns = [
 
     path('profile/getmyorderprod/', views.get_my_orders, name="get_my_orders"),  # Get Orders
     path('profile/createmyorderprod/', views.create_my_order, name="create_my_order"),  # Create Order
+    path('cart/update/<int:item_id>/', views.update_cart_quantity, name='update_cart_quantity'),
+
+    path('attendance/',views.attendance,name='attendance'),
 ]

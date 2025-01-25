@@ -1,0 +1,100 @@
+  
+  .emp-att-dashboard-container-view {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .main-content {
+    margin: 0 30px;
+    padding: 20px;
+    width: 90%;
+  }
+  
+  .emp-att-tiles-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .emp-att-total-count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .emp-att-tiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .emp-att-tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+    color: #2c3e50;
+    background: #ecf0f1;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    height: 150px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .emp-att-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  .emp-att-btn-tile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+    
+  }
+  
+  .emp-att-btn-tile img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .emp-att-btn-tile span {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .emp-att-charts-section {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .emp-att-chart {
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    text-align: center;
+  }
+  
+  .emp-att-chart span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+  }
+  

@@ -1,0 +1,12 @@
+.add_employee_form label{
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    display: block;
+    text-align: left;
+}
+.add_employee_heading{
+    font-size: 2rem;
+    color: #333;
+    font-weight: 600;
+}
