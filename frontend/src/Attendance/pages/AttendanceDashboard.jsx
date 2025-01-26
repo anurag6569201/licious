@@ -15,15 +15,15 @@ function Attendance() {
   const [jobRoleCounts, setJobRoleCounts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8070/employee/count")
+    axios.get("http://127.0.0.1:8000/employee/count")
       .then((response) => setEmployeeCount(response.data.count))
       .catch((error) => console.error("Error fetching employee count:", error));
 
-    axios.get("http://localhost:8070/EmployeeAttendance/attendance-count")
+    axios.get("http://127.0.0.1:8000/employee/attendance-count")
       .then((response) => setAttendanceCounts(response.data))
       .catch((error) => console.error("Error fetching attendance count:", error));
 
-    axios.get("http://localhost:8070/employee/jobrole-count")
+    axios.get("http://127.0.0.1:8000/employee/jobrole-count")
       .then((response) => setJobRoleCounts(response.data))
       .catch((error) => console.error("Error fetching job role counts:", error));
   }, []);
@@ -41,7 +41,7 @@ function Attendance() {
   };
 
   const barChartData = {
-    labels: jobRoleCounts.map((item) => item._id),
+    labels: jobRoleCounts.map((item) => item.jobrole),
     datasets: [
       {
         label: "Employee Count by Job Role",
@@ -66,22 +66,22 @@ function Attendance() {
         </div>
 
         <div className="emp-att-tiles-container">
-          <a href="/all-employees" className="emp-att-tile">
+          <a href="/employee" className="emp-att-tile">
             <div className="emp-att-btn-tile">
               <img src={employeeIcon} alt="Employee Icon" />
               <span>Employee Details</span>
             </div>
           </a>
-          <a href="/all-attendance-details" className="emp-att-tile">
+          <a href="/employee/add/attendance" className="emp-att-tile">
             <div className="emp-att-btn-tile">
               <img src={AttendanceIcon} alt="Attendance Icon" />
-              <span>Attendance Details</span>
+              <span>Add Attendance</span>
             </div>
           </a>
-          <a href="/all-leave-details" className="emp-att-tile">
+          <a href="/employee/attendance/details" className="emp-att-tile">
             <div className="emp-att-btn-tile">
               <img src={LeaveIcon} alt="Leave Icon" />
-              <span>Leave Status</span>
+              <span>View Attendance</span>
             </div>
           </a>
           <a href="/employee/add" className="emp-att-tile">

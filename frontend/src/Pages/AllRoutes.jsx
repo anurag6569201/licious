@@ -11,6 +11,9 @@ import ProductDetails from "../Pages/Product Details/ProductDetails"
 
 import Attendance from "../Attendance/pages/AttendanceDashboard";
 import AddEmployee from "../Attendance/pages/AddEmployee";
+import AllEmployeesDisplay from "../Attendance/pages/EmployeeDetails";
+import AddEmployeeAttendance from "../Attendance/pages/AddEmployeeAttendance";
+import AllEmployeeAttendance from "../Attendance/pages/AllEmployeeAttendance";
 const AllRoutes = () => {
   return (
     <div>
@@ -29,6 +32,9 @@ const AllRoutes = () => {
         {/* Attendance Routes */}
         <Route path='/attendance' element={<Attendance />} />
         <Route path='/employee/add' element={<AddEmployee />} />
+        <Route path='/employee/add/attendance' element={<AddEmployeeAttendance />} />
+        <Route path='/employee' element={<AllEmployeesDisplay />} />
+        <Route path='/employee/attendance/details' element={<AllEmployeeAttendance />} />
       </Routes>
     </div>
   );

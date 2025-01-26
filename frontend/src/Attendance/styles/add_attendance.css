@@ -1,0 +1,74 @@
+/* General styling for the container */
+.emp-att-background-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.emp-att-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.emp-att-date-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  text-align: left;
+}
+
+.emp-att-form-selectAttendance {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.emp-att-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.emp-att-table th, .emp-att-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.emp-att-btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.emp-att-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.text-danger {
+  font-size: 12px;
+  color: #e74c3c;
+}
+
+.form-check-inline {
+  margin-right: 15px;
+}
+
+.form-check-input {
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .emp-att-container {
+    margin-left: 0;
+    width: 100%;
+  }
+}
