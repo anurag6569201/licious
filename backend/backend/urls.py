@@ -13,4 +13,5 @@ urlpatterns = [
     path('auth/registration/', include('dj_rest_auth.registration.urls')),  # For user registration
 
     path('', include('userstuff.urls')), 
+    path('', include('attendance.urls')), 
 ]

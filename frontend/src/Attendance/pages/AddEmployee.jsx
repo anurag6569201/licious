@@ -35,9 +35,14 @@ function AddEmployee() {
     if (Object.keys(errors).length > 0) return;
 
     const newEmployee = { name, nic, email, contactNumber, gender, age, address, jobrole, qualifications };
-
+    console.log(newEmployee);
     axios
-      .post("http://localhost:8070/employee/add", newEmployee)
+      .post("http://127.0.0.1:8000/employee/add", newEmployee,{
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      })
       .then(() => {
         alert("New employee added");
       })
