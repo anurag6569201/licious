@@ -193,20 +193,20 @@ LOGIN_REDIRECT_URL = '/'
 
 
 JAZZMIN_SETTINGS = {
-    "site_title": "RFQ",
-    "site_header": "RFQ Dashboard",
-    "site_brand": "RFQ",
+    "site_title": "licious",
+    "site_header": "licious Dashboard",
+    "site_brand": "licious",
     "site_logo": "../static/assets/img/avatar.webp",  # Customize with your company's logo
     "login_logo": "../static/assets/img/avatar.webp",
-    "welcome_sign": "Welcome to RFQ Lancer Admin Panel",
-    "copyright": "therfqlancer © 2024",
+    "welcome_sign": "Welcome to licious Admin Panel",
+    "copyright": "thelicious © 2024",
     "user_avatar": "profile.picture",  # Assuming you have a user profile picture field
 
 
     # Footer Links
     "footer_links": [
-        {"name": "RFQ", "url": "https://therfqlancer.in", "new_window": True},
-        {"name": "Support", "url": "mailto:support@theflavourlake5@gmail.com", "new_window": True},
+        {"name": "licious", "url": "https://thelicious.in", "new_window": True},
+        {"name": "Support", "url": "mailto:support@@gmail.com", "new_window": True},
     ],
 
     "custom_css": "../static/assets/css/jazzmin.css",
