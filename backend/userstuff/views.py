@@ -29,7 +29,7 @@ def get_user(request):
 
     try:
         user = User.objects.get(auth_token=token)
-        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'first_name':user.first_name,'last_name':user.last_name,'date_joined':user.date_joined})  # Serialize user
+        return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'first_name':user.first_name,'last_name':user.last_name,'date_joined':user.date_joined,'role':user.is_superuser})  # Serialize user
     except User.DoesNotExist:
         return JsonResponse({'error': 'Invalid token'}, status=401)
 import json
