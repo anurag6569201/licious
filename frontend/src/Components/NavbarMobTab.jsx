@@ -66,6 +66,8 @@ const NavbarMobTab = () => {
 
   let handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("isAdmin");
     return navigate("/")
   };
   const prodCatArr = [

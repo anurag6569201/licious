@@ -11,7 +11,7 @@ function AllEmployeeAttendance() {
     const [editingAttendance, setEditingAttendance] = useState(null); // State to hold editing attendance
 
     const editFormRef = useRef(null); // Ref for the edit form
-
+    const backend_url=process.env.REACT_APP_MAIN_URL
     // Set the default filter date to today's date
     useEffect(() => {
         const today = new Date().toISOString().split('T')[0]; // Get current date in "yyyy-mm-dd" format
@@ -25,7 +25,7 @@ function AllEmployeeAttendance() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/attendance-list");
+            const response = await axios.get(backend_url+"/attendance-list");
             console.log('Fetched attendance data:', response.data);
             const formattedAttendanceDetails = response.data.map(attendance => ({
                 ...attendance,
@@ -66,7 +66,7 @@ function AllEmployeeAttendance() {
     
         if (confirmed) {
             try {
-                const response = await axios.delete(`http://127.0.0.1:8000/EmployeeAttendance/delete/${id}`);
+                const response = await axios.delete(`${backend_url}/EmployeeAttendance/delete/${id}`);
                 if (response.status === 200) {
                     setAttendanceDetails(prevAttendance => prevAttendance.filter(attendance => attendance.id !== id));
                     alert('Attendance record deleted successfully');
@@ -89,7 +89,7 @@ function AllEmployeeAttendance() {
 
     const handleUpdate = async (id, updatedAttendance) => {
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/EmployeeAttendance/update/${id}`, updatedAttendance);
+            const response = await axios.put(`${backend_url}/EmployeeAttendance/update/${id}`, updatedAttendance);
             if (response.status === 200) {
                 setAttendanceDetails(prevAttendance => {
                     return prevAttendance.map(attendance => {

@@ -8,7 +8,7 @@ export default function AddEmployeeAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [errors, setErrors] = useState([]);
   const [attendanceExists, setAttendanceExists] = useState(false);
-
+  const backend_url=process.env.REACT_APP_MAIN_URL
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -19,7 +19,7 @@ export default function AddEmployeeAttendance() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://127.0.1:8000/employee");
+      const response = await axios.get(backend_url+"/employee");
       setEmployees(response.data);
       setLoading(false);
       setAttendanceData(
@@ -79,7 +79,7 @@ export default function AddEmployeeAttendance() {
 
   const checkAttendanceExists = async () => {
     try {
-      const response = await axios.get(`http://127.0.1:8000/employee/attendance/report?date=${date}`);
+      const response = await axios.get(backend_url+`/employee/attendance/report?date=${date}`);
       setAttendanceExists(response.data.length > 0);
     } catch (error) {
       console.error("Error checking attendance:", error);
@@ -105,7 +105,7 @@ export default function AddEmployeeAttendance() {
       }));
       console.log(employeesWithAttendance);
 
-      await axios.post("http://127.0.1:8000/employee/attendance/add", employeesWithAttendance,{
+      await axios.post(backend_url+"/employee/attendance/add", employeesWithAttendance,{
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

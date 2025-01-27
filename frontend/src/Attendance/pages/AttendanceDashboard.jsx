@@ -13,17 +13,17 @@ function Attendance() {
   const [employeeCount, setEmployeeCount] = useState(0);
   const [attendanceCounts, setAttendanceCounts] = useState(null);
   const [jobRoleCounts, setJobRoleCounts] = useState([]);
-
+  const backend_url=process.env.REACT_APP_MAIN_URL
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/employee/count")
+    axios.get(backend_url+"/employee/count")
       .then((response) => setEmployeeCount(response.data.count))
       .catch((error) => console.error("Error fetching employee count:", error));
 
-    axios.get("http://127.0.0.1:8000/employee/attendance-count")
+    axios.get(backend_url+"/employee/attendance-count")
       .then((response) => setAttendanceCounts(response.data))
       .catch((error) => console.error("Error fetching attendance count:", error));
 
-    axios.get("http://127.0.0.1:8000/employee/jobrole-count")
+    axios.get(backend_url+"/employee/jobrole-count")
       .then((response) => setJobRoleCounts(response.data))
       .catch((error) => console.error("Error fetching job role counts:", error));
   }, []);

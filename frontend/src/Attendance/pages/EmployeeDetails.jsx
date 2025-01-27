@@ -12,10 +12,10 @@ function AllEmployeesDisplay() {
   const [error, setError] = useState(null);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
-
+  const backend_url=process.env.REACT_APP_MAIN_URL
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/employee")
+      .get(backend_url+"/employee")
       .then((res) => {
         setEmployees(res.data);
       })
@@ -45,7 +45,7 @@ function AllEmployeesDisplay() {
     if (confirmed) {
       try {
         const response = await axios.delete(
-          `http://127.0.0.1:8000/employee/delete/${id}`,{
+          `${backend_url}/employee/delete/${id}`,{
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

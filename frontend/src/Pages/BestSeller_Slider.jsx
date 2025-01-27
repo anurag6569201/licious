@@ -13,13 +13,13 @@ const Slider = ({ props }) => {
   const [addedItems, setAddedItems] = useState({});
   const toast = useToast();
   const dispatch = useDispatch();
-
+  const backend_url=process.env.REACT_APP_MAIN_URL
 
 
 
   useEffect(() => {
     setLoad(true)
-    axios.get("http://127.0.0.1:8000/fooditems/get?format=json").then((res) => {
+    axios.get(backend_url+"/fooditems/get?format=json").then((res) => {
       let newdata = res.data.data
       newdata = newdata.reverse()
       setData(newdata)

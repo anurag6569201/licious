@@ -14,6 +14,10 @@ import AddEmployee from "../Attendance/pages/AddEmployee";
 import AllEmployeesDisplay from "../Attendance/pages/EmployeeDetails";
 import AddEmployeeAttendance from "../Attendance/pages/AddEmployeeAttendance";
 import AllEmployeeAttendance from "../Attendance/pages/AllEmployeeAttendance";
+
+import PrivateRoute from './PrivateRoute';
+const isAdmin = localStorage.getItem("isAdmin") === "true";
+
 const AllRoutes = () => {
   return (
     <div>
@@ -30,11 +34,11 @@ const AllRoutes = () => {
 
 
         {/* Attendance Routes */}
-        <Route path='/attendance' element={<Attendance />} />
-        <Route path='/employee/add' element={<AddEmployee />} />
-        <Route path='/employee/add/attendance' element={<AddEmployeeAttendance />} />
-        <Route path='/employee' element={<AllEmployeesDisplay />} />
-        <Route path='/employee/attendance/details' element={<AllEmployeeAttendance />} />
+        <Route path="/attendance" element={<PrivateRoute isAdmin={isAdmin}><Attendance /></PrivateRoute>} />
+        <Route path="/employee/add" element={<PrivateRoute isAdmin={isAdmin}><AddEmployee /></PrivateRoute>} />
+        <Route path="/employee/add/attendance" element={<PrivateRoute isAdmin={isAdmin}><AddEmployeeAttendance /></PrivateRoute>} />
+        <Route path="/employee" element={<PrivateRoute isAdmin={isAdmin}><AllEmployeesDisplay /></PrivateRoute>} />
+        <Route path="/employee/attendance/details" element={<PrivateRoute isAdmin={isAdmin}><AllEmployeeAttendance /></PrivateRoute>} />
       </Routes>
     </div>
   );

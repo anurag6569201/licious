@@ -19,6 +19,7 @@ let userInitial = {
 };
 
 const Profile = () => {
+    const [activeTab, setActiveTab] = React.useState("orders");
 
     const Profile = useSelector((state) => state.ProfileReducer.profile) || null;
     const MyOrder = useSelector((state) => state.ProfileReducer.myOrders) || null;
@@ -83,9 +84,9 @@ const Profile = () => {
 
     const submitUserAdd = () => {
         let data = {
-            user:Profile.id,
-            name:Profile.username,
-            email:Profile.email,
+            user: Profile.id,
+            name: Profile.username,
+            email: Profile.email,
             bldgno: userAdd.bldgno,
             locality: userAdd.locality,
             landmark: userAdd.landmark,
@@ -111,57 +112,99 @@ const Profile = () => {
                         <img width={50} height={50} style={{ borderRadius: '50%' }} src={profile_logo} alt="" />
                     </div>
                     <div className="profile_header w-100">
-                        <h1 style={{ textAlign: 'left', fontSize: '25px', fontWeight: '600' }}>{Profile?.username}</h1><hr />
-                        <h1><span>{Profile?.first_name} {Profile?.last_name} | </span> <span>{Profile?.email}</span> <span onClick={onOpen}>Edit Profile</span></h1>
+                        <h1 style={{ textAlign: 'left', fontSize: '18px', fontWeight: '600',marginBottom:'5px' }}>{Profile?.username}</h1><hr />
+                        <h1 style={{ fontSize: '18px',marginTop:'5px'}}><span>{Profile?.first_name} {Profile?.last_name} | </span> <span>{Profile?.email}</span> <span onClick={onOpen} style={{ color: '#db4261', fontWeight: '700' }}>Edit Profile</span></h1>
                     </div>
                 </div>
                 <div className="profile_space mt-4">
-                    <Accordion allowMultiple>
-                        <AccordionItem borderRadius={"5px"}>
-                            <h3>
-                                <AccordionButton padding="7px 0">
-                                    <Box color='#d11243' flex='1' textAlign='left'>
-                                        My Orders
-                                    </Box>
-                                    <AccordionIcon color={"#d11243"} />
-                                </AccordionButton>
-                            </h3>
-                            <AccordionPanel pb={4}>
-                                <Box flex='1' textAlign='left'>
-                                    {MyOrder?.length > 0 && MyOrder?.map((item) => {
-                                        console.log("my order",MyOrder)
-                                        return <MyOrders_Card key={item.id} data={item.products} time={item.created_at} />
-                                    })}
-                                </Box>
-                            </AccordionPanel>
-                        </AccordionItem>
-                        <AccordionItem borderRadius={"5px"}>
-                            <h3>
-                                <AccordionButton padding="7px 0">
-                                    <Box color='#d11243' flex='1' textAlign='left'>
-                                        Saved Address
-                                    </Box>
-                                    <AccordionIcon color={"#d11243"} />
-                                </AccordionButton>
-                            </h3>
-                            <AccordionPanel pb={4} padding="0">
-                                <VStack borderRadius={"10px"} padding={"10px"}  border={"1px solid red"} justifyContent={"flex-start"} alignItems={"flex-start"}>
-                                    <HStack width={"100%"} justifyContent={'space-between'}>
+                    <Flex direction="row" gap={4} className="profile_space_row" minHeight="70vh">
+                        {/* Left Side Navigation */}
+                        <Box
+                            className="profile_nav"
+                            width="25%"
+                            borderRight="1px solid #ddd"
+                            padding="10px"
+                            color="#333"
+                        >
+                            <VStack align="flex-start" spacing={4}>
+                                <Text
+                                    as="button"
+                                    onClick={() => setActiveTab("orders")}
+                                    color={activeTab === "orders" ? "#d11243" : "inherit"}
+                                    fontWeight={activeTab === "orders" ? "bold" : "normal"}
+                                >
+                                    My Orders
+                                </Text>
+                                <Text
+                                    as="button"
+                                    onClick={() => setActiveTab("address")}
+                                    color={activeTab === "address" ? "#d11243" : "inherit"}
+                                    fontWeight={activeTab === "address" ? "bold" : "normal"}
+                                >
+                                    Saved Address
+                                </Text>
+                            </VStack>
+                        </Box>
+
+                        {/* Right Side Content */}
+                        <Box width="75%" padding="10px" className="profile_content">
+                            {activeTab === "orders" && (
+                                <div allowMultiple>
+                                    {MyOrder?.length > 0 &&
+                                        MyOrder.map((item) => {
+                                            console.log("my order", MyOrder);
+                                            return (
+                                                <MyOrders_Card
+                                                    key={item.id}
+                                                    data={item.products}
+                                                    time={item.created_at}
+                                                />
+                                            );
+                                        })}
+                                </div>
+                            )}
+
+                            {activeTab === "address" && (
+                                <VStack
+                                    borderRadius={"10px"}
+                                    padding={"10px"}
+                                    border={"1px solid red"}
+                                    justifyContent={"flex-start"}
+                                    alignItems={"flex-start"}
+                                >
+                                    <HStack width={"100%"} justifyContent={"space-between"}>
                                         <Text>Saved Address</Text>
-                                        <Button alignSelf={"end"} bg={"#d11243"} size={"md"} padding={"8px"} color={"white"} onClick={AddAddress}>Add New Address</Button>
+                                        <Button
+                                            alignSelf={"end"}
+                                            bg={"#d11243"}
+                                            size={"md"}
+                                            padding={"8px"}
+                                            color={"white"}
+                                            onClick={AddAddress}
+                                        >
+                                            Add New Address
+                                        </Button>
                                     </HStack>
                                     {Address?.length > 0 ? (
                                         Address.map((item) => (
-                                            <Address_card key={item.id} id={item.id} bldgno={item.bldgno} locality={item.locality} landmark={item.landmark} city={item.city} />
+                                            <Address_card
+                                                key={item.id}
+                                                id={item.id}
+                                                bldgno={item.bldgno}
+                                                locality={item.locality}
+                                                landmark={item.landmark}
+                                                city={item.city}
+                                            />
                                         ))
                                     ) : (
                                         <Text>No addresses found.</Text>
                                     )}
                                 </VStack>
-                            </AccordionPanel>
-                        </AccordionItem>
-                    </Accordion>
+                            )}
+                        </Box>
+                    </Flex>
                 </div>
+
             </div>
 
             {/* Drawer Component */}

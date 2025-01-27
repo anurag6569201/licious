@@ -1,9 +1,10 @@
 import * as types from "./actionTypes";
 import axios from "axios";
+const backend_url= process.env.REACT_APP_MAIN_URL
 
 const getProducts = (id) => (dispatch) => {
   dispatch({ type: types.GET_PRODUCTS_REQUEST });
-  const url = 'http://127.0.0.1:8000/fooditems/get/' + id + '?format=json';
+  const url = backend_url+'/fooditems/get/' + id + '?format=json';
   // console.log("changed id", id)
   return axios
     .get(url)
@@ -20,7 +21,7 @@ const getProducts = (id) => (dispatch) => {
 
 const getAllProducts = () => (dispatch) => {
   dispatch({ type: types.GET_ALL_PRODUCTS_REQUEST });
-  const url = 'http://127.0.0.1:8000/fooditems/get?format=json';
+  const url = backend_url+'/fooditems/get?format=json';
   return axios
     .get(url)
     .then((r) => {

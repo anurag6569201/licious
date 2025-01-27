@@ -17,7 +17,7 @@ const Product = () => {
   const [subCategory, setSubCategory] = useState([]);
   const [category, setCategory] = useState('');
   const [currCatProductsId, setCurrCatProductsId] = useState("");
-  const url = process.env.REACT_APP_PRODUCTS_URL;
+  const url = process.env.REACT_APP_MAIN_URL;
   useEffect(() => {
     axios
       .get(`${url}/category/${id}`)

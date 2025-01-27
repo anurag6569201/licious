@@ -274,9 +274,9 @@ export default function Checkout() {
   useEffect(() => {
     dispatch(getCartData());
   }, []);
-
+  const backend_url=process.env.REACT_APP_MAIN_URL
   const cart = useSelector((state) => state.ProfileReducer.cart);
-  const URL_MAIN = 'http://127.0.0.1:8000';
+  const URL_MAIN = backend_url;
   const handleSubmit = async (razorpay_payment_id) => {
     let cart_data_checkout = {
       user: "",

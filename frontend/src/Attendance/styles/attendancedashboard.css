@@ -97,4 +97,9 @@
     margin-bottom: 10px;
     display: block;
   }
+  .emp-att-chart canvas{
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
   

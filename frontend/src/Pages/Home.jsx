@@ -6,12 +6,14 @@ import Slider2 from "./Boneless_Slider";
 import { Box, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Show, Hide } from '@chakra-ui/react'
-
+import { useDispatch } from 'react-redux';
+import { getProfileData } from '../Redux/ProfileRedux/action';
 
 
 const Home = () => {
-
-
+  const dispatch = useDispatch();
+  const backend_url=process.env.REACT_APP_MAIN_URL
+  console.log(backend_url)
   const ADDTOCARTBUTTON = () => {
     const [check, setcheck] = useState(0)
     return (<>
@@ -37,9 +39,10 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    dispatch(getProfileData());
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/category/all/?format=json');
+        const response = await fetch(backend_url+'/category/all/?format=json');
         const data = await response.json();
         setCategories(data);
       } catch (error) {

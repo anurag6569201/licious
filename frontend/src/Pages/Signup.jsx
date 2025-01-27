@@ -34,8 +34,8 @@ const Signup = ({ onClose }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
-  const URL_MAIN = "http://127.0.0.1:8000";
+  const backend_url=process.env.REACT_APP_MAIN_URL
+  const URL_MAIN = backend_url;
 
   const toggleForm = () => {
     setIsSignupForm(!isSignupForm);

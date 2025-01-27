@@ -1,7 +1,8 @@
 import * as types from "./actionType";
 import axios from "axios";
+const backend_url=process.env.REACT_APP_MAIN_URL
 
-const URL_MAIN ='http://127.0.0.1:8000';
+const URL_MAIN =backend_url;
 //------------------------------------Profile section 
 export const profileRequest = () => {
     return { type: types.PROFILE_REQUEST };
@@ -26,6 +27,8 @@ export const getProfileData = () => (dispatch) => {
     }).then((r) => {
         console.log(localStorage.getItem("token"))
         console.log("r", r.data)
+        const isAdmin = r.data.role;
+        localStorage.setItem("isAdmin", isAdmin); 
         dispatch(profileSuccess(r.data));
     }).catch((e) => {
         dispatch(profileFailure());

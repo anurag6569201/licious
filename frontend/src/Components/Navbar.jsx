@@ -43,6 +43,7 @@ import { getAllProducts } from "../Redux/ProductsRedux/action";
 
 
 const MiddleNavbar = () => {
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   const { isOpen, onOpen, onToggle1, onClose } = useDisclosure();
   const Api_start = `https://api.openweathermap.org/data/2.5/weather?`;
   const Api_key = `566cee1b29349fab7cfc8dfe8ff9e2fc`;
@@ -140,6 +141,8 @@ const MiddleNavbar = () => {
   ]
   let handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("isAdmin");
     return navigate("/")
   };
 
@@ -236,11 +239,17 @@ const MiddleNavbar = () => {
                       </MenuItem>
                     </Link>
 
-                    <Link to="/attendance">
-                    <MenuItem icon={""} >
-                      Attendance
-                    </MenuItem>
-                    </Link>
+                  {isAdmin ? (
+                      <Link to="/attendance">
+                        <MenuItem icon={""}>
+                          Attendance
+                        </MenuItem>
+                      </Link>
+                    ) : (
+                      <MenuItem icon={""} style={{ cursor: "not-allowed", opacity: 0.5 }}>
+                        Attendance (Restricted)
+                      </MenuItem>
+                    )}
 
                     <MenuDivider />
                     <MenuItem onClick={handleLogout} icon={""}>

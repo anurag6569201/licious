@@ -14,6 +14,7 @@ function AddEmployee() {
   const [qualifications, setQualifications] = useState("");
   const [errors, setErrors] = useState({});
 
+  const backend_url=process.env.REACT_APP_MAIN_URL
   function sendData(e) {
     e.preventDefault();
 
@@ -37,7 +38,7 @@ function AddEmployee() {
     const newEmployee = { name, nic, email, contactNumber, gender, age, address, jobrole, qualifications };
     console.log(newEmployee);
     axios
-      .post("http://127.0.0.1:8000/employee/add", newEmployee,{
+      .post(`${backend_url}/employee/add`, newEmployee,{
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

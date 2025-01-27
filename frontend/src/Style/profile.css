@@ -1,17 +1,32 @@
-.main_profile_card{
-    width: 90% !important;
-}
-.main_profile_card .chakra-accordion__panel{
-    padding: 0 !important;
-}
-.main_profile_card .address_model_profile,
-.main_profile_card .chakra-modal__content{
-    width: 90% !important;
-}
-
-.mainbox form{
-    width: 90% !important;
-}
-.mainbox .statics_bill_checkout div{
-    width: 90%;
+@media (max-width: 768px) {
+    .main_profile_card{
+        width: 90% !important;
+    }
+    .main_profile_card .chakra-accordion__panel{
+        padding: 0 !important;
+    }
+    .main_profile_card .address_model_profile,
+    .main_profile_card .chakra-modal__content{
+        width: 90% !important;
+    }
+    
+    .mainbox form{
+        width: 90% !important;
+    }
+    .mainbox .statics_bill_checkout div{
+        width: 90%;
+    }    
+    .profile_space_row{
+        flex-direction: column !important;
+    }
+    .profile_content{
+        padding: 0 !important;
+    }
+    .profile_nav{
+        border-bottom: 1px solid #ccc;
+    }
+    .profile_content,
+    .profile_nav{
+        width: 100% !important;
+    }
 }
