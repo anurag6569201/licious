@@ -93,12 +93,6 @@ function Attendance() {
         </div>
 
         <div className="emp-att-charts-section">
-          <div className="emp-att-chart">
-            <span>
-              {attendanceCounts ? `Today's Attendance: Present - ${attendanceCounts.presentCount}, Absent - ${attendanceCounts.absentCount}` : "Attendance not marked yet"}
-            </span>
-            <Pie data={pieChartData} />
-          </div>
 
           <div className="emp-att-chart">
             <span>Employee Count by Job Role</span>

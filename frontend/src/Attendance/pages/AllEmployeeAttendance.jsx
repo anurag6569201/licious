@@ -155,7 +155,6 @@ function AllEmployeeAttendance() {
                             <th>Day Type</th>
                             <th>Date</th>
                             <th>Attendance</th>
-                            <th>Operations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -167,10 +166,6 @@ function AllEmployeeAttendance() {
                                 <td>{record.day_type}</td>
                                 <td>{record.date}</td>
                                 <td>{record.attendance}</td>
-                                <td>
-                                    <button type="button" className="btn btn-success me-2" onClick={() => handleEdit(record.id)}>Edit</button>
-                                    <button type="button" className="btn btn-danger" onClick={() => handleDelete(record.id)}>Delete</button>
-                                </td>
                             </tr>
                         ))}
                     </tbody>
