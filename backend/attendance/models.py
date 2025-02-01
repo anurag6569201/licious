@@ -3,6 +3,7 @@ from django.db import models
 class Employee(models.Model):
     name = models.CharField(max_length=255)
     nic = models.CharField(max_length=20, unique=True)
+    aadhaarImage = models.ImageField(upload_to='docs/')
     email = models.EmailField(null=True, blank=True)
     contactNumber = models.CharField(max_length=15)
     gender = models.CharField(max_length=10)

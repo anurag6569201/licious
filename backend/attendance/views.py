@@ -23,16 +23,19 @@ def add_employee(request):
         user = User.objects.get(auth_token=token)
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=404)
-    
+
     if not user.is_superuser:
         return Response({'error': 'Permission denied'}, status=403)
-    else:
-        serializer = EmployeeSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "New Employee added"}, status=status.HTTP_201_CREATED)
-    return Response({"error": "Failed to add new employee", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+    data = request.data.copy()
+    data['aadhaarImage'] = request.FILES.get('aadhaarImage')
+
+    serializer = EmployeeSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "New Employee added"}, status=status.HTTP_201_CREATED)
+
+    return Response({"error": "Failed to add new employee", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -45,24 +48,26 @@ def employee_list(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def attendance_list(request):
+    date = request.GET.get('date')
     attendance = EmployeeAttendance.objects.all()
-    attendance_data = []
 
-    for record in attendance:
-        # Fetch the employee related to the attendance record
-        employee = record.employee
-        employee_data = EmployeeSerializer(employee).data
+    if date:
+        attendance = attendance.filter(date=date)
 
-        # Combine the attendance and employee data
-        attendance_data.append({
+    attendance_data = [
+        {
             "id": record.id,
             "date": record.date,
             "attendance": record.attendance,
             "day_type": record.day_type,
-            "employee": employee_data
-        })
+            "employee": EmployeeSerializer(record.employee).data
+        }
+        for record in attendance
+    ]
 
     return Response(attendance_data)
+
+
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_employee(request, id):

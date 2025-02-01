@@ -6,110 +6,36 @@ import SearchIcon from '../icons/search2.png';
 function AllEmployeeAttendance() {
     const [attendanceDetails, setAttendanceDetails] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [filterDate, setFilterDate] = useState(''); // State for date filter
+    const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
     const [error, setError] = useState(null);
-    const [editingAttendance, setEditingAttendance] = useState(null); // State to hold editing attendance
-
-    const editFormRef = useRef(null); // Ref for the edit form
-    const backend_url=process.env.REACT_APP_MAIN_URL
-    // Set the default filter date to today's date
-    useEffect(() => {
-        const today = new Date().toISOString().split('T')[0]; // Get current date in "yyyy-mm-dd" format
-        setFilterDate(today); // Set the default date to today's date
-        fetchData(); // Fetch attendance data
-    }, []); // Empty dependency array ensures this runs only once when the component mounts
+    const editFormRef = useRef(null);
+    const backend_url = process.env.REACT_APP_MAIN_URL;
 
     useEffect(() => {
-        fetchData();
-    }, [filterDate]); // Fetch data whenever the filterDate state changes
+        fetchData(filterDate);
+    }, [filterDate]);
 
-    const fetchData = async () => {
+    const fetchData = async (date) => {
         try {
-            const response = await axios.get(backend_url+"/attendance-list");
-            console.log('Fetched attendance data:', response.data);
+            const response = await axios.get(`${backend_url}/attendance-list?date=${date}`);
             const formattedAttendanceDetails = response.data.map(attendance => ({
                 ...attendance,
-                date: new Date(attendance.date).toISOString().split('T')[0] // Extract the date part
+                date: new Date(attendance.date).toISOString().split('T')[0]
             }));
             setAttendanceDetails(formattedAttendanceDetails);
-            console.log('Formatted attendance details:', formattedAttendanceDetails);
         } catch (error) {
             console.error('Error fetching attendance details:', error);
             setError("Error fetching attendance details");
         }
     };
 
-    const filteredAttendance = attendanceDetails.filter(attendance => {
-        const matchesDate = filterDate === '' || attendance.date === filterDate;
-    
-        const matchesSearchQuery = (
-            attendance.employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            attendance.employee.nic.toString().includes(searchQuery.toLowerCase()) ||
-            attendance.employee.jobrole.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            attendance.day_type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            attendance.attendance.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    
-        return matchesDate && matchesSearchQuery;
-    });
-
-    const handleSearchInputChange = event => {
-        setSearchQuery(event.target.value);
-    };
-
-    const handleDateFilterChange = event => {
-        setFilterDate(event.target.value);
-    };
-
-    const handleDelete = async (id) => {
-        const confirmed = window.confirm('Are you sure you want to delete this attendance record?');
-    
-        if (confirmed) {
-            try {
-                const response = await axios.delete(`${backend_url}/EmployeeAttendance/delete/${id}`);
-                if (response.status === 200) {
-                    setAttendanceDetails(prevAttendance => prevAttendance.filter(attendance => attendance.id !== id));
-                    alert('Attendance record deleted successfully');
-                } else {
-                    console.error("Error deleting attendance record:", response.statusText);
-                    setError("Error deleting attendance record");
-                }
-            } catch (error) {
-                console.error("Error deleting attendance record:", error.message);
-                setError("Error deleting attendance record");
-            }
-        }
-    };
-
-    const handleEdit = (id) => {
-        const attendanceToEdit = filteredAttendance.find(attendance => attendance.id === id);
-        setEditingAttendance(attendanceToEdit);
-        editFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    const handleUpdate = async (id, updatedAttendance) => {
-        try {
-            const response = await axios.put(`${backend_url}/EmployeeAttendance/update/${id}`, updatedAttendance);
-            if (response.status === 200) {
-                setAttendanceDetails(prevAttendance => {
-                    return prevAttendance.map(attendance => {
-                        if (attendance.id === id) {
-                            return { ...attendance, ...updatedAttendance };
-                        }
-                        return attendance;
-                    });
-                });
-                setEditingAttendance(null);
-                alert('Attendance record updated successfully');
-            } else {
-                console.error("Error updating attendance record:", response.statusText);
-                setError("Error updating attendance record");
-            }
-        } catch (error) {
-            console.error("Error updating attendance record:", error.message);
-            setError("Error updating attendance record");
-        }
-    };
+    const filteredAttendance = attendanceDetails.filter(attendance => (
+        attendance.employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        attendance.employee.nic.toString().includes(searchQuery.toLowerCase()) ||
+        attendance.employee.jobrole.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        attendance.day_type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        attendance.attendance.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
 
     return (
         <div className="emp-att-background-container">
@@ -126,7 +52,7 @@ function AllEmployeeAttendance() {
                             className="form-control"
                             placeholder="Search attendance details"
                             value={searchQuery}
-                            onChange={handleSearchInputChange}
+                            onChange={e => setSearchQuery(e.target.value)}
                         />
                     </div>
                     <div className="mb-4" style={{ display: 'flex', alignItems: 'center' }}>
@@ -136,7 +62,7 @@ function AllEmployeeAttendance() {
                                 type="date"
                                 className="form-control"
                                 value={filterDate}
-                                onChange={handleDateFilterChange}
+                                onChange={e => setFilterDate(e.target.value)}
                             />
                         </div>
                     </div>
@@ -150,7 +76,7 @@ function AllEmployeeAttendance() {
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>NIC</th>
+                            <th>Aadhaar Number</th>
                             <th>Job Role</th>
                             <th>Day Type</th>
                             <th>Date</th>
@@ -158,27 +84,24 @@ function AllEmployeeAttendance() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredAttendance.map(record => (
-                            <tr key={record.id}>
-                                <td>{record.employee.name}</td>
-                                <td>{record.employee.nic}</td>
-                                <td>{record.employee.jobrole}</td>
-                                <td>{record.day_type}</td>
-                                <td>{record.date}</td>
-                                <td>{record.attendance}</td>
+                        {filteredAttendance.length > 0 ? (
+                            filteredAttendance.map(record => (
+                                <tr key={record.id}>
+                                    <td>{record.employee.name}</td>
+                                    <td>{record.employee.nic}</td>
+                                    <td>{record.employee.jobrole}</td>
+                                    <td>{record.day_type}</td>
+                                    <td>{record.date}</td>
+                                    <td>{record.attendance}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center">No attendance taken yet</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
-                {editingAttendance && (
-                    <div ref={editFormRef}>
-                        {/* <UpdateAttendance
-                            attendance={editingAttendance}
-                            onUpdate={handleUpdate}
-                            onCancel={() => setEditingAttendance(null)}
-                        /> */}
-                    </div>
-                )}
             </div>
         </div>
     );

@@ -5,6 +5,7 @@ import '../styles/employee.css';
 function AddEmployee() {
   const [name, setName] = useState("");
   const [nic, setNIC] = useState("");
+  const [aadhaarImage, setAadhaarImage] = useState(null);
   const [email, setEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [gender, setGender] = useState("");
@@ -14,7 +15,8 @@ function AddEmployee() {
   const [qualifications, setQualifications] = useState("");
   const [errors, setErrors] = useState({});
 
-  const backend_url=process.env.REACT_APP_MAIN_URL
+  const backend_url = process.env.REACT_APP_MAIN_URL;
+
   function sendData(e) {
     e.preventDefault();
 
@@ -31,18 +33,29 @@ function AddEmployee() {
     if (!address) errors.address = "Address is required";
     if (!jobrole) errors.jobrole = "Job role is required";
     if (!qualifications) errors.qualifications = "Qualifications are required";
+    if (!aadhaarImage) errors.aadhaarImage = "Aadhaar image is required";
 
     setErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
-    const newEmployee = { name, nic, email, contactNumber, gender, age, address, jobrole, qualifications };
-    console.log(newEmployee);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("nic", nic);
+    formData.append("aadhaarImage", aadhaarImage);
+    formData.append("email", email);
+    formData.append("contactNumber", contactNumber);
+    formData.append("gender", gender);
+    formData.append("age", age);
+    formData.append("address", address);
+    formData.append("jobrole", jobrole);
+    formData.append("qualifications", qualifications);
+
     axios
-      .post(`${backend_url}/employee/add`, newEmployee,{
+      .post(`${backend_url}/employee/add`, formData, {
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       })
       .then(() => {
         alert("New employee added");
@@ -51,6 +64,7 @@ function AddEmployee() {
         alert(err);
       });
   }
+
 
   return (
     <div className="container my-5 pt-5">
@@ -76,13 +90,13 @@ function AddEmployee() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="nic" className="form-label">
-                    Employee NIC:
+                    Aadhaar Number:
                   </label>
                   <input
                     type="text"
                     className={`form-control ${errors.nic ? "is-invalid" : ""}`}
                     id="nic"
-                    placeholder="Enter Employee NIC"
+                    placeholder="Enter Aadhaar Number"
                     value={nic}
                     onChange={(e) => setNIC(e.target.value)}
                   />
@@ -147,6 +161,17 @@ function AddEmployee() {
                     onChange={(e) => setContactNumber(e.target.value)}
                   />
                   {errors.contactNumber && <div className="invalid-feedback">{errors.contactNumber}</div>}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="aadhaarImage" className="form-label">Upload Aadhaar Image :</label>
+                  <input
+                    type="file"
+                    className={`form-control ${errors.aadhaarImage ? "is-invalid" : ""}`}
+                    id="aadhaarImage"
+                    accept="image/*"
+                    onChange={(e) => setAadhaarImage(e.target.files[0])}
+                  />
+                  {errors.aadhaarImage && <div className="invalid-feedback">{errors.aadhaarImage}</div>}
                 </div>
                 <div className="mb-3">
                   <label htmlFor="address" className="form-label">

@@ -149,7 +149,7 @@ export default function AddEmployeeAttendance() {
       <thead>
         <tr>
           <th>Employee Name</th>
-          <th>NIC</th>
+          <th>Aadhaar Number</th>
           <th>Job Role</th>
           <th>Attendance</th>
           <th>Day Type</th>
