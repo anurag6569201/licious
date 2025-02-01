@@ -2,7 +2,7 @@
 .emp-att-background-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  justify-content: center;
 }
 .emp-att-heading {
   font-size: 24px;
@@ -50,7 +50,9 @@
 }
 
 .emp-att-btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #09478a;
+  color: white;
+  transition: .3s;
 }
 
 .text-danger {

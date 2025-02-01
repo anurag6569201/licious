@@ -39,10 +39,10 @@ function AllEmployeeAttendance() {
 
     return (
         <div className="emp-att-background-container">
-            <div className="emp-att-container mt-3" style={{ maxWidth: "calc(100% - 255px)", paddingLeft: "20px", paddingBottom: "20px", paddingTop: "10px" }}>
-                <h1>All Attendance Details</h1>
+            <div className="emp-att-container mt-3" style={{ paddingBottom: "20px", paddingTop: "10px",width:'75%' }}>
+                <h1 style={{fontSize:'2rem',fontWeight:'700',textAlign:'left',marginBottom:'20px',marginTop:'20px'}}>All Attendance Details</h1>
                 {error && <div className="alert alert-danger" role="alert">{error}</div>}
-                <div className="d-flex justify-content-between align-items-center mb-3" style={{ width: "1000px", textAlign: 'center' }}>
+                <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="input-group mb-4" style={{ width: "300px" }}>
                         <span className="input-group-text">
                             <img src={SearchIcon} alt="Search" style={{ width: '20px', height: '20px' }} />

@@ -90,6 +90,12 @@ function Attendance() {
               <span>Add Employee</span>
             </div>
           </a>
+          <a href="/inventory/add" className="emp-att-tile">
+            <div className="emp-att-btn-tile">
+              <img src={addIcon} alt="Leave Icon" />
+              <span>Add Inventory</span>
+            </div>
+          </a>
         </div>
 
         <div className="emp-att-charts-section">
