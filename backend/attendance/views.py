@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Employee,EmployeeAttendance
-from .serializers import EmployeeSerializer,EmployeeAttendanceSerializer
+from .models import Employee,EmployeeAttendance,InventoryItem,Supplier
+from .serializers import EmployeeSerializer,EmployeeAttendanceSerializer,InventoryItemSerializer,SupplierSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view,permission_classes
@@ -136,3 +136,166 @@ def attendance_count(request):
 def job_role_count(request):
     job_roles = Employee.objects.values('jobrole').annotate(count=Count('jobrole'))
     return JsonResponse(list(job_roles), safe=False)
+
+
+
+
+# --------------------------------------------------------
+# inventory
+# --------------------------------------------------------
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Change this if authentication is needed
+def add_inventory_item(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    if not user.is_staff:  # Only staff members can add inventory items
+        return Response({'error': 'Permission denied'}, status=403)
+
+    serializer = InventoryItemSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Inventory item added successfully"}, status=status.HTTP_201_CREATED)
+
+    return Response({"error": "Failed to add inventory item", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_inventory_item(request):
+    inventory = InventoryItem.objects.all()
+    serialized_inventory = InventoryItemSerializer(inventory, many=True)
+    return JsonResponse({"inventory": serialized_inventory.data}, safe=False)
+
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def get_inventory_item_update(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    if not user.is_staff:  # Only staff members can update inventory items
+        return Response({'error': 'Permission denied'}, status=403)
+
+    item_id = request.data.get('id')
+    consumption_amount = request.data.get('quantity')
+
+    try:
+        item = InventoryItem.objects.get(id=item_id)
+    except InventoryItem.DoesNotExist:
+        return Response({'error': 'Inventory item not found'}, status=404)
+
+    if consumption_amount and float(consumption_amount) > 0:
+        item.quantity -= float(consumption_amount)
+        item.save()
+        return Response({"message": "Inventory item updated successfully", "updated_quantity": item.quantity}, status=status.HTTP_200_OK)
+
+    return Response({"error": "Invalid consumption amount"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def get_inventory_item_delete(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    if not user.is_staff:  # Only staff members can delete inventory items
+        return Response({'error': 'Permission denied'}, status=403)
+
+    item_id = request.data.get('id')
+    try:
+        item = InventoryItem.objects.get(id=item_id)
+    except InventoryItem.DoesNotExist:
+        return Response({'error': 'Inventory item not found'}, status=404)
+
+    item.delete()
+    return Response({"message": "Inventory item deleted successfully"}, status=status.HTTP_200_OK)
+
+
+# --------------------------------------------------------
+# supplier
+# --------------------------------------------------------
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Change this if authentication is needed
+def add_supplier_item(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    if not user.is_staff:  # Only staff members can add supplier items
+        return Response({'error': 'Permission denied'}, status=403)
+
+    serializer = SupplierSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "supplier item added successfully"}, status=status.HTTP_201_CREATED)
+
+    return Response({"error": "Failed to add supplier item", "details": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_supplier_item(request):
+    supplier = Supplier.objects.all()
+    serialized_supplier = SupplierSerializer(supplier, many=True)
+    return JsonResponse({"supplier": serialized_supplier.data}, safe=False)
+
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def get_supplier_item_delete(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+    else:
+        return Response({'error': 'Token missing'}, status=401)
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+    if not user.is_staff:  # Only staff members can delete inventory items
+        return Response({'error': 'Permission denied'}, status=403)
+
+    item_id = request.data.get('id')
+    try:
+        item = Supplier.objects.get(id=item_id)
+    except Supplier.DoesNotExist:
+        return Response({'error': 'Inventory item not found'}, status=404)
+
+    item.delete()
+    return Response({"message": "Inventory item deleted successfully"}, status=status.HTTP_200_OK)

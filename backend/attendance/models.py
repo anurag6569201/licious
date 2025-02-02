@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 class Employee(models.Model):
     name = models.CharField(max_length=255)
@@ -27,3 +29,33 @@ class EmployeeAttendance(models.Model):
 
     def __str__(self):
         return f"{self.employee.name} - {self.date}"
+    
+
+
+
+class InventoryItem(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=100)
+    quantity = models.FloatField()
+    unit = models.CharField(max_length=50, default='kg')
+    min_stock = models.FloatField()
+    expiration_date = models.DateField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
+    def is_expired(self):
+        return self.expiration_date and self.expiration_date < timezone.now().date()
+    
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=255)
+    contact = models.CharField(max_length=255)
+    specialty = models.CharField(max_length=255)
+    rating = models.IntegerField(default=3)
+    last_delivery = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
