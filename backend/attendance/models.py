@@ -59,3 +59,12 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ConsumptionHistory(models.Model):
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
+    quantity_consumed = models.FloatField()
+    consumed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} consumed {self.quantity_consumed} of {self.item.name} on {self.consumed_at}"

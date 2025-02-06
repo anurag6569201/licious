@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Employee,EmployeeAttendance,InventoryItem,Supplier
+from .models import Employee,EmployeeAttendance,InventoryItem,Supplier,ConsumptionHistory
 from .serializers import EmployeeSerializer,EmployeeAttendanceSerializer,InventoryItemSerializer,SupplierSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
@@ -198,15 +198,38 @@ def get_inventory_item_update(request):
 
     try:
         item = InventoryItem.objects.get(id=item_id)
-    except InventoryItem.DoesNotExist:
-        return Response({'error': 'Inventory item not found'}, status=404)
-
-    if consumption_amount and float(consumption_amount) > 0:
-        item.quantity -= float(consumption_amount)
+        if consumption_amount > item.quantity:
+            return Response({'error': 'Not enough stock'}, status=400)
+        
+        item.quantity -= consumption_amount
         item.save()
-        return Response({"message": "Inventory item updated successfully", "updated_quantity": item.quantity}, status=status.HTTP_200_OK)
 
-    return Response({"error": "Invalid consumption amount"}, status=status.HTTP_400_BAD_REQUEST)
+        # Log consumption history
+        ConsumptionHistory.objects.create(
+            item=item,
+            quantity_consumed=consumption_amount
+        )
+
+        return Response({'message': 'Inventory updated', 'remaining_quantity': item.quantity}, status=200)
+    
+    except InventoryItem.DoesNotExist:
+        return Response({'error': 'Item not found'}, status=404)
+    
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_consumption_history(request):
+    history = ConsumptionHistory.objects.all().order_by('-consumed_at')
+    history_data = [
+        {
+            'unit':entry.item.unit,
+            "item_name": entry.item.name,
+            "quantity_consumed": entry.quantity_consumed,
+            "date": entry.consumed_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        for entry in history
+    ]
+    return Response(history_data, status=200)
 
 
 @api_view(['DELETE'])

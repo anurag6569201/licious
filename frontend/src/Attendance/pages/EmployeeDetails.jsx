@@ -121,6 +121,7 @@ function AllEmployeesDisplay() {
                 <tr>
                   <th>Name</th>
                   <th>Aadhaar Number</th>
+                  <th>JobRole</th>
                   <th>Contact Info</th>
                   <th>Aadhar Image</th>
                   <th>Actions</th>
@@ -132,8 +133,9 @@ function AllEmployeesDisplay() {
                     <tr key={employee.nic}>
                       <td>{employee.name}</td>
                       <td>{employee.nic}</td>
+                      <td>{employee.jobrole}</td>
                       <td>{employee.email} <br />{employee.contactNumber}</td>
-                      <td><a target="_blank" href={`${backend_url}${employee.aadhaarImage}`}>{employee.aadhaarImage && (<img src={`${backend_url}${employee.aadhaarImage}`} alt="Aadhaar" width="150px" height="80px" />)}</a></td>
+                      <td style={{display:'flex',alignItems:'center',justifyContent:'center'}}><a target="_blank" href={`${backend_url}${employee.aadhaarImage}`}>{employee.aadhaarImage && (<img src={`${backend_url}${employee.aadhaarImage}`} alt="Aadhaar" width="100px" style={{borderRadius:'10px'}} />)}</a></td>
                       <td>
                         <button
                           className="btn btn-sm"

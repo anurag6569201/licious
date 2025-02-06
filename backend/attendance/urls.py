@@ -20,6 +20,7 @@ urlpatterns = [
     path('inventory/get', views.get_inventory_item, name='get_inventory_item'),
     path('inventory/update', views.get_inventory_item_update, name='get_inventory_item_update'),
     path('inventory/delete', views.get_inventory_item_delete, name='get_inventory_item_delete'),
+    path('inventory/consumption-history', views.get_consumption_history, name='get_consumption_history'),
 
     path('supplier/add', views.add_supplier_item, name='add_supplier_item'),
     path('supplier/get', views.get_supplier_item, name='get_supplier_item'),
