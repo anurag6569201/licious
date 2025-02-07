@@ -171,7 +171,7 @@ const MiddleNavbar = () => {
                 <MenuList style={{ padding: "5%" }}>
                   {categories.map((el) => {
                     return <MenuItem>
-                      <Link to={`/product/${el.id}`} style={{ display: "flex", alignItems: "center" }}>
+                      <Link to={`/product/${el.product_id}`} style={{ display: "flex", alignItems: "center" }}>
                         <Image width="35px" src={el.imgSrc} />
                         <Text>&nbsp;{el.name}</Text>
                       </Link>{" "}
