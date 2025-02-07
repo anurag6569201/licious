@@ -58,7 +58,6 @@ const OrderDetailsDelivery = () => {
         },
         params: { otp: trimmedOtp },
       });
-
       if (response.data) {
         setOrder(response.data);
       } else {
@@ -86,7 +85,7 @@ const OrderDetailsDelivery = () => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/confirm_order/", // Add the API endpoint for confirming the order
-        { order_id: order.id }, // Pass the necessary data (order ID)
+        { order_id: order.id,otp_token:otp }, // Pass the necessary data (order ID)
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -102,7 +101,9 @@ const OrderDetailsDelivery = () => {
           duration: 5000,
           isClosable: true,
         });
-        setOrder({ ...order, is_delivered: true }); // Update the order status locally if needed
+        setOrder({ ...order, is_delivered: true });
+        setOrder(null);
+        setOtp("");
       } else {
         setError("Failed to confirm the order.");
       }
@@ -180,10 +181,12 @@ const OrderDetailsDelivery = () => {
                   Order Summary
                 </Heading>
                 
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3} className="simplegrid_delivery">
                   <DetailItem label="Order ID" value={order.id} />
-                  <DetailItem label="User ID" value={order.user} />
                   <DetailItem label="Payment ID" value={order.payment_id} />
+                  <DetailItem label="Username" value={order.address['name']} />
+                  <DetailItem label="Email" value={order.address['email']} />
+                  <DetailItem label="Address" value={order.address['bldgno'] + ' ' + order.address['locality'] + ' ' + order.address['landmark']+ ' ' + order.address['city']} />
                   <DetailItem 
                     label="Status" 
                     value={

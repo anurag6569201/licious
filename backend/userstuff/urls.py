@@ -31,4 +31,6 @@ urlpatterns = [
 
     path('delivery/',views.delivery,name='delivery'),
     path('delivery-check/',views.is_delivery_person,name='is_delivery_person'),
+    path('confirm_order/',views.confirm_order,name='confirm_order'),
+    path('show-orders/',views.orders_to_show,name='orders_to_show'),
 ]

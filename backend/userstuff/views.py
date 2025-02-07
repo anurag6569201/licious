@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from .models import Address, CartProduct, MyOrder,ProductCategory
-from .serializers import AddressSerializer, CartProductSerializer, MyOrderSerializer,ProductCategorySerializer
+from .serializers import AddressSerializer, CartProductSerializer, MyOrderSerializer,ProductCategorySerializer,MyOrderSerializerDelivery
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
@@ -18,6 +18,8 @@ from .serializers import FoodItemSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required,permission_required
+from datetime import timedelta
+from django.utils import timezone
 # Profile Routes
 
 def get_user(request):
@@ -374,16 +376,75 @@ def delivery(request):
     if 'change_myorder' in all_permissions:
         otp = request.GET.get('otp')
         otp = int(otp)
-        print(type(otp))
-        print(otp)
         if not otp:
             return JsonResponse({'error': 'OTP is required'}, status=400)
 
         try:
-            otp=950822
             order = MyOrder.objects.get(otp_token=otp)
-            print(order)
-            serializer = MyOrderSerializer(order)  # Removed `many=True`
+            serializer = MyOrderSerializerDelivery(order)  # Removed `many=True`
             return JsonResponse(serializer.data, safe=False)
         except MyOrder.DoesNotExist:
             return JsonResponse({'error': 'No order found for this OTP'}, status=404)
+        
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def confirm_order(request):
+    data = request.data
+
+    order_id = data.get("order_id")
+    otp = data.get("otp_token")
+    if not order_id:
+        return Response(
+            {"detail": "Order ID is required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    print(data)
+    try:
+        order = MyOrder.objects.get(id=order_id,otp_token=otp)  
+        order.is_delivered = True
+        order.save()
+
+        return Response(
+            {"success": True, "message": "Order has been confirmed."},
+            status=status.HTTP_200_OK,
+        )
+
+    except MyOrder.DoesNotExist:
+        return Response(
+            {"detail": "Order not found or does not belong to the authenticated user."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    except Exception as e:
+        return Response(
+            {"detail": f"An error occurred: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+    
+
+
+def orders_to_show(request):
+    # Extract the Authorization header
+    auth_header = request.headers.get('Authorization')
+    
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return JsonResponse({'error': 'Token missing or invalid'}, status=401)
+    
+    token = auth_header.split(' ')[1]
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'Invalid token'}, status=401)
+
+    permissions = set(user.user_permissions.values_list('codename', flat=True))
+    group_permissions = set(user.groups.values_list('permissions__codename', flat=True))
+    all_permissions = permissions | group_permissions  
+    if 'change_myorder' in all_permissions:
+        last_24_hours = timezone.now() - timedelta(days=1)
+        orders = MyOrder.objects.filter(is_delivered=False, created_at__gte=last_24_hours)
+        serializer = MyOrderSerializerDelivery(orders, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    return JsonResponse({'error': 'Insufficient permissions'}, status=403)
