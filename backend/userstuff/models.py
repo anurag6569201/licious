@@ -46,7 +46,7 @@ class MyOrder(models.Model):
 # home page category api model
 class ProductCategory(models.Model):
     product_id=models.CharField(max_length=100)
-    imgSrc=models.ImageField(upload_to='product_category/')
+    imgSrc=models.URLField()
     name=models.CharField(max_length=50)
 
 # food items

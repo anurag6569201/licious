@@ -86,59 +86,22 @@ const MiddleNavbar = () => {
       setSuggestionList(newSuggestionList);
     }
   }, [query])
+  const backend_url=process.env.REACT_APP_MAIN_URL
+  const [categories, setCategories] = useState([]);
 
-  const prodCatArr = [
-    {
-      id: "636d5d0d144878242abc33ed",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/d52759ea-ba5a-0f5b-3dc1-d28875335a3f/original/Todays_Deal_1.png",
-      name: "Today's Deals"
-    },
-    {
-      id: "636d5ca4144878242abc33eb",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/ad04872e-60af-387c-533c-efa7dc6eb565/original/Chicken_(1).png",
-      name: "Chicken"
-    },
-    {
-      id: "636d5d0d144878242abc33ed",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/eb162d28-5f88-a381-1d45-7f2f66d2c776/original/FIsh.png",
-      name: "Fish And SeaFood"
-    },
-    {
-      id: "636d5d16144878242abc33ef",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/7113e792-7025-9e6f-6057-7174edf30856/original/Mu.png",
-      name: "Mutton"
-    },
-    {
-      id: "63bc984b7a2a152161ac0217",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/43faaebc-f2ae-102a-ea01-af3e6c37a890/original/RTC.png",
-      name: "Ready To Cook"
-    },
-    {
-      id: "636fe63ffb4172486544289c",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/404e48e5-c887-1e12-7a3a-232e01fc9771/original/Prawn.png",
-      name: "Prawns"
-    },
-    {
-      id: "63bc98867a2a152161ac0219",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/5c7f1b3a-47b4-3ade-f170-f003cace2482/original/Coldcuts.png",
-      name: "Cold Cuts"
-    },
-    {
-      id: "63bc98a27a2a152161ac021b",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/88d8c760-ee1f-7696-7827-fcc9661925cc/original/Spread_Bottle1.png",
-      name: "Spreads"
-    },
-    {
-      id: "636d5d22144878242abc33f1",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/04d58840-f014-e613-24d4-1908db9a7e63/original/Eggs.png",
-      name: "Eggs"
-    },
-    {
-      id: "636d5d34144878242abc33f3",
-      imgSrc: "https://dao54xqhg9jfa.cloudfront.net/OMS-Category/189690c6-c9d5-2441-938b-6c7e124972c7/original/Biryani.png",
-      name: "Biryani & Kebab"
-    }
-  ]
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(backend_url+'/category/all/?format=json');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   let handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("cart");
@@ -206,7 +169,7 @@ const MiddleNavbar = () => {
                   }
                 </MenuButton>
                 <MenuList style={{ padding: "5%" }}>
-                  {prodCatArr?.map((el) => {
+                  {categories.map((el) => {
                     return <MenuItem>
                       <Link to={`/product/${el.id}`} style={{ display: "flex", alignItems: "center" }}>
                         <Image width="35px" src={el.imgSrc} />
