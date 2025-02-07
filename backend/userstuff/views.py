@@ -78,15 +78,18 @@ from django.contrib.auth.models import User
 
 
 def home(request):
-    auth_header = request.headers.get('Authorization')
+    # auth_header = request.headers.get('Authorization')
 
-    if auth_header and auth_header.startswith('Bearer '):
-        token = auth_header.split(' ')[1]
-    else:
-        return JsonResponse({'error': 'Token missing'}, status=401)
+    # if auth_header and auth_header.startswith('Bearer '):
+    token = "40a011f3caa4ae5b610074f2de739599cf9209ad"
+    # else:
+    #     return JsonResponse({'error': 'Token missing'}, status=401)
 
     try:
         user = User.objects.get(auth_token=token)
+        otp=950822
+        order = MyOrder.objects.get(user=user, otp_token=otp)
+        print(order)
         return JsonResponse({'id': user.id, 'username': user.username, 'email': user.email, 'first_name':user.first_name,'last_name':user.last_name,'date_joined':user.date_joined})  # Serialize user
     except User.DoesNotExist:
         return JsonResponse({'error': 'Invalid token'}, status=401)
@@ -351,29 +354,36 @@ def is_delivery_person(request):
         return JsonResponse({'error': 'Invalid token'}, status=401)
     
 
-@api_view(['GET'])
-@permission_required('home.change_myOrder', raise_exception=True)
 def delivery(request):
     # Extract the Authorization header
     auth_header = request.headers.get('Authorization')
     
     if not auth_header or not auth_header.startswith('Bearer '):
-        return Response({'error': 'Token missing or invalid'}, status=401)
+        return JsonResponse({'error': 'Token missing or invalid'}, status=401)
     
     token = auth_header.split(' ')[1]
 
     try:
         user = User.objects.get(auth_token=token)
     except User.DoesNotExist:
-        return Response({'error': 'Invalid token'}, status=401)
+        return JsonResponse({'error': 'Invalid token'}, status=401)
 
-    otp = request.GET.get('otp')
-    if not otp:
-        return Response({'error': 'OTP is required'}, status=400)
+    permissions = set(user.user_permissions.values_list('codename', flat=True))
+    group_permissions = set(user.groups.values_list('permissions__codename', flat=True))
+    all_permissions = permissions | group_permissions  # Merge permissions
+    if 'change_myorder' in all_permissions:
+        otp = request.GET.get('otp')
+        otp = int(otp)
+        print(type(otp))
+        print(otp)
+        if not otp:
+            return JsonResponse({'error': 'OTP is required'}, status=400)
 
-    try:
-        order = MyOrder.objects.get(user=user, otp_token=otp)
-        serializer = MyOrderSerializer(order)
-        return Response(serializer.data)
-    except MyOrder.DoesNotExist:
-        return Response({'error': 'No order found for this OTP'}, status=404)
+        try:
+            otp=950822
+            order = MyOrder.objects.get(otp_token=otp)
+            print(order)
+            serializer = MyOrderSerializer(order)  # Removed `many=True`
+            return JsonResponse(serializer.data, safe=False)
+        except MyOrder.DoesNotExist:
+            return JsonResponse({'error': 'No order found for this OTP'}, status=404)

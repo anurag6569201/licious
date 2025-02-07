@@ -1,0 +1,12 @@
+@media (max-width:500px) {
+    .delivery_box{
+        width: 100% !important;
+    }
+    .delivery_box{
+        max-width: 100% !important;
+    }
+    .delivery_flex_service{
+        flex-direction: row !important;
+        -webkit-flex-direction:row !important;
+    }
+}

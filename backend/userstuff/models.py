@@ -37,7 +37,7 @@ class MyOrder(models.Model):
     payment_id = models.CharField(max_length=100)
     address_id = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="address",blank=True,null=True)
     is_delivered = models.BooleanField(default=False)
-    otp_token = models.CharField(max_length=100,blank=True,null=True)
+    otp_token = models.IntegerField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
