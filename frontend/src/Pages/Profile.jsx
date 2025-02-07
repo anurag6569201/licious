@@ -158,6 +158,8 @@ const Profile = () => {
                                                     key={item.id}
                                                     data={item.products}
                                                     time={item.created_at}
+                                                    otp={item.otp_token}
+                                                    is_delivered={item.is_delivered}
                                                 />
                                             );
                                         })}

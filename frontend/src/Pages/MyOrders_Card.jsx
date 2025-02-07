@@ -1,7 +1,7 @@
 import { Box, Flex, HStack, Image, Text, VStack, Grid, GridItem } from "@chakra-ui/react";
 import React from "react";
 
-const MyOrders_Card = ({ data, time }) => {
+const MyOrders_Card = ({ data, time, otp, is_delivered }) => {
     let startTime = new Date(`${time}`).toLocaleString();
     let totalPrice = data.reduce((accumulator, currentValue) => accumulator + +currentValue.price, 0);
 
@@ -11,16 +11,16 @@ const MyOrders_Card = ({ data, time }) => {
             borderRadius="8px"
             boxShadow="0 2px 4px rgba(0, 0, 0, 0.08)"
             mb={3}
-            bg="white"
             border="1px solid #e2e8f0"
+            bg={is_delivered ? "#d3febc" : "white"}
         >
             {/* Order Header */}
             <HStack justifyContent="space-between" mb={2}>
                 <Text fontSize="12px" color="gray.700" isTruncated>
-                    <b style={{ color: "#d11243" }}>{data?.length} Products</b> ordered on {startTime}
+                    <b style={{ color: "#d11243" }}>{data?.length} Products</b> ordered on {startTime} <span style={{fontWeight:'bold'}}>{is_delivered ? "Delivered" : "Dilivery Yet"}</span>
                 </Text>
                 <Text fontSize="12px" fontWeight="bold" color="#d11243">
-                    ₹{totalPrice}
+                    <span style={{marginRight:'10px'}}>OTP: {otp} ||</span> ₹{totalPrice}
                 </Text>
             </HStack>
 

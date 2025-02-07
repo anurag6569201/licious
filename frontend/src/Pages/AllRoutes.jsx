@@ -16,7 +16,10 @@ import AddEmployeeAttendance from "../Attendance/pages/AddEmployeeAttendance";
 import AllEmployeeAttendance from "../Attendance/pages/AllEmployeeAttendance";
 
 import PrivateRoute from './PrivateRoute';
+import PrivateRouteDelivery from './PrivateRouteDelivery';
 import InventoryManager from "../Attendance/pages/services/InventoryManager";
+import OrderDetailsDelivery from "./Delivery";
+
 const isAdmin = localStorage.getItem("isAdmin") === "true";
 
 const AllRoutes = () => {
@@ -41,7 +44,9 @@ const AllRoutes = () => {
         <Route path="/employee" element={<PrivateRoute isAdmin={isAdmin}><AllEmployeesDisplay /></PrivateRoute>} />
         <Route path="/employee/attendance/details" element={<PrivateRoute isAdmin={isAdmin}><AllEmployeeAttendance /></PrivateRoute>} />
         <Route path="inventory" element={<PrivateRoute isAdmin={isAdmin}><InventoryManager /></PrivateRoute>} />
-      </Routes>
+
+        <Route path='/delivery' element={ <PrivateRouteDelivery><OrderDetailsDelivery /> </PrivateRouteDelivery>} /> </Routes>
+
     </div>
   );
 };

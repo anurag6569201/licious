@@ -278,11 +278,14 @@ export default function Checkout() {
   const cart = useSelector((state) => state.ProfileReducer.cart);
   const URL_MAIN = backend_url;
   const handleSubmit = async (razorpay_payment_id) => {
+    let otp = Math.floor(100000 + Math.random() * 900000);
     let cart_data_checkout = {
       user: "",
       products: cart,
       payment_id: razorpay_payment_id,
       address_id: localStorage.getItem("selectedAddress"),
+      is_delivered:false,
+      otp_token: otp,
     };
 
     console.log("cart data checkout", cart_data_checkout);

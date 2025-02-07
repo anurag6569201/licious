@@ -17,6 +17,7 @@ from .models import FoodItem
 from .serializers import FoodItemSerializer
 
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required,permission_required
 # Profile Routes
 
 def get_user(request):
@@ -317,7 +318,62 @@ def update_cart_quantity(request, item_id):
 
 
 
-
-
 def attendance(request):
     return render(request,'attendance/attendance.html')
+
+
+
+
+
+
+
+def is_delivery_person(request):
+    auth_header = request.headers.get('Authorization')
+
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return Response({'error': 'Token missing or invalid'}, status=401)
+
+    token = auth_header.split(' ')[1]
+
+    try:
+        user = User.objects.get(auth_token=token)
+        permissions = set(user.user_permissions.values_list('codename', flat=True))
+        group_permissions = set(user.groups.values_list('permissions__codename', flat=True))
+        all_permissions = permissions | group_permissions  # Merge permissions
+        if 'change_myorder' in all_permissions:
+            return JsonResponse({
+                'delivery_person':True
+            })
+        else:
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'Invalid token'}, status=401)
+    
+
+@api_view(['GET'])
+@permission_required('home.change_myOrder', raise_exception=True)
+def delivery(request):
+    # Extract the Authorization header
+    auth_header = request.headers.get('Authorization')
+    
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return Response({'error': 'Token missing or invalid'}, status=401)
+    
+    token = auth_header.split(' ')[1]
+
+    try:
+        user = User.objects.get(auth_token=token)
+    except User.DoesNotExist:
+        return Response({'error': 'Invalid token'}, status=401)
+
+    otp = request.GET.get('otp')
+    if not otp:
+        return Response({'error': 'OTP is required'}, status=400)
+
+    try:
+        order = MyOrder.objects.get(user=user, otp_token=otp)
+        serializer = MyOrderSerializer(order)
+        return Response(serializer.data)
+    except MyOrder.DoesNotExist:
+        return Response({'error': 'No order found for this OTP'}, status=404)
