@@ -33,7 +33,7 @@ const OrderDetailsDelivery = () => {
   const [order, setOrder] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false); // For confirm order button loading
+ // For confirm order button loading
   const toast = useToast();
   const cardBg = useColorModeValue("white", "gray.750");
   const accentColor = useColorModeValue("blue.500", "blue.300");
@@ -76,49 +76,7 @@ const OrderDetailsDelivery = () => {
     setLoading(false);
   };
 
-  const confirmOrder = async () => {
-    if (confirmLoading) return;
 
-    setConfirmLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/confirm_order/", // Add the API endpoint for confirming the order
-        { order_id: order.id,otp_token:otp }, // Pass the necessary data (order ID)
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        toast({
-          title: "Order Confirmed",
-          description: "The order has been confirmed successfully.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-        setOrder({ ...order, is_delivered: true });
-        setOrder(null);
-        setOtp("");
-      } else {
-        setError("Failed to confirm the order.");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to confirm order");
-      toast({
-        title: "Error",
-        description: "Failed to confirm the order.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-    setConfirmLoading(false);
-  };
 
   return (
     <Box maxW="75%" className="delivery_box" mx="auto">
@@ -133,7 +91,7 @@ const OrderDetailsDelivery = () => {
               <Heading size="lg" fontWeight="extrabold">
                 Track Order Delivery
               </Heading>
-              <Text color="gray.500">Enter OTP received by customer</Text>
+              <Text color="gray.500">Enter OTP </Text>
             </VStack>
           </HStack>
 
@@ -261,21 +219,7 @@ const OrderDetailsDelivery = () => {
                   ))}
                 </SimpleGrid>
 
-                {/* Confirm Order Button */}
-                {!order.is_delivered && (
-                  <Button
-                    onClick={confirmOrder}
-                    colorScheme="green"
-                    size="lg"
-                    width="full"
-                    isLoading={confirmLoading}
-                    loadingText="Confirming..."
-                    isDisabled={confirmLoading}
-                    mt={6}
-                  >
-                    Confirm Order
-                  </Button>
-                )}
+
               </VStack>
             </SlideFade>
           )}

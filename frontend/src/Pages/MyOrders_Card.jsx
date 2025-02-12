@@ -1,5 +1,6 @@
-import { Box, Flex, HStack, Image, Text, VStack, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Flex, HStack, Image, Text, VStack, Grid, GridItem, Button } from "@chakra-ui/react";
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyOrders_Card = ({ data, time, otp, is_delivered }) => {
     let startTime = new Date(`${time}`).toLocaleString();
@@ -17,7 +18,7 @@ const MyOrders_Card = ({ data, time, otp, is_delivered }) => {
             {/* Order Header */}
             <HStack justifyContent="space-between" mb={2}>
                 <Text fontSize="12px" color="gray.700" isTruncated>
-                    <b style={{ color: "#d11243" }}>{data?.length} Products</b> ordered on {startTime} <span style={{fontWeight:'bold'}}>{is_delivered ? "Delivered" : "Dilivery Yet"}</span>
+                    <b style={{ color: "#d11243" }}>{data?.length} Products</b> ordered on {startTime} <span style={{fontWeight:'bold'}}>{is_delivered ? "Delivered" : "Dilivery Yet"}</span> <Link to='/delivery' style={{background:'#ccc',color:'#d11243',padding:'0 10px',borderRadius:'10px',marginLeft:'10px'}}>Track It</Link>
                 </Text>
                 <Text fontSize="12px" fontWeight="bold" color="#d11243">
                     <span style={{marginRight:'10px'}}>OTP: {otp} ||</span> ₹{totalPrice}
