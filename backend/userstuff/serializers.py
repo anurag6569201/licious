@@ -24,7 +24,7 @@ class MyOrderSerializerDelivery(serializers.ModelSerializer):
     address = AddressSerializer(source='address_id')
     class Meta:
         model = MyOrder
-        fields = ['id', 'user', 'products','payment_id','address','is_delivered','otp_token','created_at']
+        fields = ['id', 'user', 'products','payment_id','address','is_delivered','created_at']
 
 
 

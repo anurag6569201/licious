@@ -269,7 +269,7 @@ def get_my_orders(request):
         return Response({'error': 'Token missing'}, status=401)
     try:
         user = User.objects.get(auth_token=token)
-        item = MyOrder.objects.filter(user=user).all()
+        item = MyOrder.objects.filter(user=user).all().order_by('-created_at')
         serializer = MyOrderSerializer(item,many=True)
         return Response(serializer.data)  # Wrap the data in a 'data' key
     except FoodItem.DoesNotExist:
@@ -370,21 +370,18 @@ def delivery(request):
     except User.DoesNotExist:
         return JsonResponse({'error': 'Invalid token'}, status=401)
 
-    permissions = set(user.user_permissions.values_list('codename', flat=True))
-    group_permissions = set(user.groups.values_list('permissions__codename', flat=True))
-    all_permissions = permissions | group_permissions  # Merge permissions
-    if 'change_myorder' in all_permissions:
-        otp = request.GET.get('otp')
-        otp = int(otp)
-        if not otp:
-            return JsonResponse({'error': 'OTP is required'}, status=400)
+    otp = request.GET.get('otp')
+    otp = int(otp)
+    if not otp:
+        return JsonResponse({'error': 'OTP is required'}, status=400)
 
-        try:
-            order = MyOrder.objects.get(otp_token=otp)
-            serializer = MyOrderSerializerDelivery(order)  # Removed `many=True`
-            return JsonResponse(serializer.data, safe=False)
-        except MyOrder.DoesNotExist:
-            return JsonResponse({'error': 'No order found for this OTP'}, status=404)
+    try:
+        last_24_hours = timezone.now() - timedelta(days=1)
+        order = MyOrder.objects.get(otp_token=otp,created_at__gte=last_24_hours)
+        serializer = MyOrderSerializerDelivery(order)  # Removed `many=True`
+        return JsonResponse(serializer.data, safe=False)
+    except MyOrder.DoesNotExist:
+        return JsonResponse({'error': 'No order found for this OTP'}, status=404)
         
 
 @api_view(['POST'])
@@ -402,7 +399,8 @@ def confirm_order(request):
 
     print(data)
     try:
-        order = MyOrder.objects.get(id=order_id,otp_token=otp)  
+        last_24_hours = timezone.now() - timedelta(days=1)
+        order = MyOrder.objects.get(id=order_id,otp_token=otp,created_at__gte=last_24_hours)  
         order.is_delivered = True
         order.save()
 
@@ -444,7 +442,7 @@ def orders_to_show(request):
     all_permissions = permissions | group_permissions  
     if 'change_myorder' in all_permissions:
         last_24_hours = timezone.now() - timedelta(days=1)
-        orders = MyOrder.objects.filter(is_delivered=False, created_at__gte=last_24_hours)
+        orders = MyOrder.objects.filter(created_at__gte=last_24_hours)
         serializer = MyOrderSerializerDelivery(orders, many=True)
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse({'error': 'Insufficient permissions'}, status=403)
