@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Show, Hide } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux';
 import { getProfileData } from '../Redux/ProfileRedux/action';
-
+import mnw_banner from "./Product Details/Images/mnw_banner.webp";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const Home = () => {
       <div className="mainDiv">
         <Img margin={"auto"} borderRadius={"10px"} pt={"20px"}
           width={["100%", "80%", "75%"]}
-          src="https://dao54xqhg9jfa.cloudfront.net/oms/c34eb824-4fdd-912c-b4e6-ab14fd512896/original/BANNERS-02_(4).jpeg"
+          src={mnw_banner}
           alt="anil kapoor img"
         />
       </div>
