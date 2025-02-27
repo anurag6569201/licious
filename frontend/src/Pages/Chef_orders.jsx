@@ -25,6 +25,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+const backend_url=process.env.REACT_APP_MAIN_URL
+
 const Last24HoursOrders = () => {
   const [orders, setOrders] = useState([]);
   const toast = useToast();
@@ -40,7 +42,7 @@ const Last24HoursOrders = () => {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://127.0.0.1:8000/show-orders/", {
+        const response = await axios.get(backend_url+"/show-orders/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -70,7 +72,7 @@ const Last24HoursOrders = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/confirm_order/",
+        backend_url+"/confirm_order/",
         { order_id: selectedOrder.id, otp_token: otp },
         {
           headers: {

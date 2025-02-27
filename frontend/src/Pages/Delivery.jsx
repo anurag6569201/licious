@@ -28,6 +28,7 @@ import {
 import { FiRefreshCcw, FiPackage } from "react-icons/fi";
 import '../Style/delivery.css'
 
+const backend_url=process.env.REACT_APP_MAIN_URL
 const OrderDetailsDelivery = () => {
   const [otp, setOtp] = useState("");
   const [order, setOrder] = useState(null);
@@ -52,7 +53,7 @@ const OrderDetailsDelivery = () => {
     setOrder(null);
 
     try {
-      const response = await axios.get("http://127.0.0.1:8000/delivery/", {
+      const response = await axios.get(backend_url+"/delivery/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

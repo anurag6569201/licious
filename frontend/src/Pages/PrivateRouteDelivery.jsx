@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+const backend_url=process.env.REACT_APP_MAIN_URL
 
 const PrivateRouteDelivery = ({ children, requiredPermission }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -9,7 +10,7 @@ const PrivateRouteDelivery = ({ children, requiredPermission }) => {
   useEffect(() => {
     const checkPermission = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/delivery-check/", {
+        const response = await axios.get(backend_url+"/delivery-check/", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
