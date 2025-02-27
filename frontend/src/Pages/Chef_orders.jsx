@@ -120,7 +120,7 @@ const Last24HoursOrders = () => {
 
   return (
     <VStack spacing={8} align="stretch" mt={8} maxW="75%" mx="auto">
-      <Heading size="lg" fontWeight="bold">Orders from Last 24 Hours</Heading>
+      <Heading size="lg" marginTop='40px' fontWeight="bold">Orders from Last 24 Hours</Heading>
       <Divider borderWidth="1px" borderColor="gray.300" />
 
       {/* Pending Orders */}

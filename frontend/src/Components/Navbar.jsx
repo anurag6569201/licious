@@ -113,7 +113,7 @@ const MiddleNavbar = () => {
     <Box className="MiddleNavbar-main">
       <Flex style={{ gap: "20px", alignItems: "center", justifyContent: "space-between" }}>
         <Box>
-          <Link to="/"> <Image width="120px" src={LICIOUS} /> </Link>
+          <Link to="/"> <Image width="70px" src={LICIOUS} /> </Link>
         </Box>
         <Box>
           <Flex>

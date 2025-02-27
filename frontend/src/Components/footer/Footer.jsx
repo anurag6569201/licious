@@ -1,15 +1,14 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import styled from "./footer.module.css";
-import Footer1 from "./Footer1.jpg";
-import Footer2 from "./Footer2.jpg";
+import LICIOUS from "../D'LICIOUS.jpeg";
 
 const Footer = () => {
   return (
     <div className={styled.maxWidth} style={{maxWidth:'75%',marginTop:'100px'}}>
 
     <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:'20px'}}>
-    <img className={styled.firstimg} src="https://www.licious.in/image/rebranding/png/logo-homepage.png" alt="footerlogo" />
+    <img className={styled.firstimg} src={LICIOUS} alt="footerlogo" />
     <div style={{width:'100%',height:'1px',backgroundColor:'grey',marginBottom:'10px',opacity:'.25'}}></div>
     </div>
       {/* useful links footer */}
@@ -34,11 +33,11 @@ const Footer = () => {
         <div>
           <li className={styled.logos}><b>EXPERIENCE LICIOUS APP ON MOBILE</b></li>
           <div className={styled.apps}>
-            <a href="https://apps.apple.com/in/app/buy-meat-online-licious/id1052440342" target="_blank"><img
+            <a href="" target="_blank"><img
               style={{ width: "120px", height: "40px" }}
               src="https://www.licious.in/image/rebranding/png/app-store-homepage.png" alt="" />
             </a>
-            <a href="https://play.google.com/store/apps/details?id=com.licious&pli=1" target="_blank">
+            <a href="" target="_blank">
               <img
                 style={{ marginLeft: "15px", width: "120px", height: "40px" }}
                 src="https://www.licious.in/image/rebranding/png/playstore-homepage.png" alt="" />
@@ -87,7 +86,7 @@ const Footer = () => {
         <div>
           <img
             style={{ width: "150px" }}
-            src="https://www.licious.in/image/rebranding/png/logo-homepage.png"
+            src={LICIOUS}
             alt="footercartlogo" />
         </div>
       </div>
