@@ -1,6 +1,7 @@
 @media (max-width: 768px) {
     .main_profile_card{
         width: 90% !important;
+        margin-top: 130px !important;
     }
     .main_profile_card .chakra-accordion__panel{
         padding: 0 !important;

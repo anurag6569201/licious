@@ -106,7 +106,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className='container p-0 main_profile_card' style={{ marginTop: '100px', width: '75%', textAlign: 'left' }}>
+            <div className='container p-0 main_profile_card' style={{ marginTop: '120px', width: '75%', textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div className="profile_logo">
                         <img width={50} height={50} style={{ borderRadius: '50%' }} src={profile_logo} alt="" />

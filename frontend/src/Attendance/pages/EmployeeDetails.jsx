@@ -72,7 +72,7 @@ function AllEmployeesDisplay() {
   };
 
   return (
-    <div className="container p-0" style={{width:'75%',marginTop:'100px'}}>
+    <div className="container p-0" style={{width:'75%',marginTop:'120px'}}>
         <div className="card-header text-white">
           <h2 className="mb-0" style={{textAlign:'left',color:'black',fontSize:'1.6rem',fontWeight:'600'}}>Employee List</h2><br />
         </div>

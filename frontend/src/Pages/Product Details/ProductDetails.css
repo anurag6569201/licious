@@ -271,7 +271,20 @@
 
         display: grid;
         grid-template-columns: repeat(1, 1fr);
+        
     }
+    .img-desc{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .sourcing-container{
+        flex-direction: column;
+      }
+      .features-list li{
+        text-align: left;
+      }
 
 
 

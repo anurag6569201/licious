@@ -85,7 +85,7 @@ const Footer = () => {
 
         <div>
           <img
-            style={{ width: "150px" }}
+            style={{ width: "70px" }}
             src={LICIOUS}
             alt="footercartlogo" />
         </div>
@@ -212,27 +212,13 @@ const Footer = () => {
 
 
 
-
-      <hr style={{ margin: "3%" }} />
-
+<br /><hr /><br />
       <p style={{ textAlign: "center", fontSize: "12px", color: "#333a3f" }}>
 
 
         <b> @2022 Delicious. All Rights Reserved. Developed by: <a style={{color:'red',textDecoration:'underline'}} href="https://anurag.icu">anurag6569201</a></b>
 
       </p>
-      <Box style={{ textAlign: "justify", alignItems: "center", fontSize: "12px", marginBottom: "2%" }}>
-
-        <Text fontSize={["14px", "14px", "12px"]} color='#4a4a4a'> Licious is your one-stop fresh meat delivery shop. In here, you get
-          nothing but the freshest meat & seafood, delivered straight to your
-          doorstep. Now you can buy meat online anytime at your convenience.
-          Indulge in our diverse selection: Chicken, Mutton, Seafood (Fish,
-          Prawns, Crabs), Marinades & Cold Cuts. All our products are completely
-          natural and healthy. Once you've experienced Licious, you'll
-
-
-          never go back to the old way of buying meat and seafood.</Text>
-      </Box>
 
     </div>
   );
