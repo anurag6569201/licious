@@ -16,22 +16,19 @@ const Footer = () => {
         {/* first footer div column*/}
         <div>
           <li className={styled.firli}><b>USEFUL LINKS</b></li>
-          <li>Why Licious?</li>
+          <li>Why MNW?</li>
           <li>Refer & Earn</li>
-          <li>Licious Cash & Cash+</li>
+          <li>MNW Cash & Cash+</li>
           <li>Careers</li>
           <li>BLOG</li>
           <li>Campaign</li>
           <li>Bug Bounty Guidelines</li>
           <li>About Us</li>
-          <li>FSSC 22000 Certification</li>
-          <li>FSSAI Licenses</li>
-          <li>Sitemap</li>
         </div>
 
         {/* second footer div column*/}
         <div>
-          <li className={styled.logos}><b>EXPERIENCE LICIOUS APP ON MOBILE</b></li>
+          <li className={styled.logos}><b>EXPERIENCE MNW APP ON MOBILE</b></li>
           <div className={styled.apps}>
             <a href="" target="_blank"><img
               style={{ width: "120px", height: "40px" }}
@@ -53,16 +50,16 @@ const Footer = () => {
               <b>CONTACT US</b>
             </li>
             <li>Call: 1800-4190-786</li>
-            <li> Talktous@licious.com</li>
+            <li> Talktous@mnw.com</li>
           </div>
 
           <div style={{ marginTop: "12px" }}>
             <li style={{ fontWeight: "600px", color: "rgb(100 100 100)" }}>
               <b>REGISTERED OFFICE ADDRESS:</b>
             </li>
-            <li>House of Licious, Zed Pearl, No 12,</li>
-            <li>Domlur Layout</li>
-            <li>Bangalore, Karnataka - 560071</li>
+            <li>plot no. -3,</li>
+            <li>Infocity Avenue ,</li>
+            <li>Patia, Bhubaneswar, 751024</li>
           </div>
         </div>
         {/* Fourth part of footer div */}
